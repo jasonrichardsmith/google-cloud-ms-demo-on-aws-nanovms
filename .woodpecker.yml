@@ -5,11 +5,11 @@ pipeline:
     commands:
       - echo $BUCKET > /tmp/bucket
       - export bucket=$(cat /tmp/bucket)
-      - cat images/$${SERVICE}/config.json | jq --arg bucket "$bucket" '.CloudConfig.Bucket = $bucket' > /tmp/config.json
       - TZ=Europe/Amsterdam
       - ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
       - apt-get update
-      - apt-get install -y wget git curl apt-transport-https
+      - apt-get install -y wget git curl apt-transport-https jq
+      - cat images/cartservice/config.json | jq --arg bucket "$bucket" '.CloudConfig.Bucket = $bucket' > /tmp/config.json
       - curl https://ops.city/get.sh -sSfL | sh
       - wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
       - dpkg -i packages-microsoft-prod.deb
