@@ -1,0 +1,24 @@
+pipeline:
+  cartservice:
+    image: ubuntu:20.04
+    secrets: [aws_access_key_id, aws_secret_access_key, bucket]
+    commands:
+      - echo $BUCKET > /tmp/bucket
+      - export bucket=$(cat /tmp/bucket)
+      - cat images/$${SERVICE}/config.json | jq --arg bucket "$bucket" '.CloudConfig.Bucket = $bucket' > /tmp/config.json
+      - TZ=Europe/Amsterdam
+      - ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+      - apt-get update
+      - apt-get install -y wget git curl apt-transport-https
+      - curl https://ops.city/get.sh -sSfL | sh
+      - wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+      - dpkg -i packages-microsoft-prod.deb
+      - apt-get update
+      - apt-get install -y dotnet-sdk-6.0
+      - rm packages-microsoft-prod.deb
+      - git clone https://github.com/GoogleCloudPlatform/microservices-demo.git
+      - cd microservices-demo/src/cartservice/src/
+      - dotnet restore cartservice.csproj -r linux-x64
+      - dotnet publish -c release --self-contained --runtime linux-x64 -o /publish -p:PublishSingleFile=true
+      - ops image create /publish/cartservice -i cartservice -c /tmp/config.json --show-debug -t aws
+branches: master
