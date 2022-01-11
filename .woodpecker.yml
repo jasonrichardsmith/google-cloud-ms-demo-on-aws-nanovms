@@ -20,5 +20,5 @@ pipeline:
       - cd microservices-demo/src/cartservice/src/
       - dotnet restore cartservice.csproj -r linux-x64
       - dotnet publish -c release --self-contained --runtime linux-x64 -o /publish -p:PublishSingleFile=true
-      - ops image create /publish/cartservice -i cartservice -c /tmp/config.json --show-debug -t aws
+      - /root/.ops/bin/ops image create /publish/cartservice -i cartservice -c /tmp/config.json --show-debug -t aws
 branches: master
