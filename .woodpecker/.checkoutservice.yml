@@ -10,6 +10,7 @@ pipeline:
     commands:
       - cd microservices-demo/src/checkoutservice
       - apk add --no-cache ca-certificates
+      - apk add build-base
       - go mod download
       - go build -ldflags "-linkmode external -extldflags -static" -a .
   checkoutserviceimagepush:
@@ -23,5 +24,6 @@ pipeline:
       - curl https://ops.city/get.sh -sSfL | sh
       - cat images/checkoutservice/config.json | jq --arg bucket "$bucket" '.CloudConfig.BucketName = $bucket' > /tmp/config.json
       - cd microservices-demo/src/checkoutservice
+      - cp /tmp/config.json . 
       - /root/.ops/bin/ops image create checkoutservice -i checkoutservice -c /tmp/config.json --show-debug -t aws
 branches: master
