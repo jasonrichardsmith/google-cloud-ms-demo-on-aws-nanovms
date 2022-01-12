@@ -1,19 +1,19 @@
 pipeline:
-  frontendimageclone:
+  shippingserviceimageclone:
     image: ubuntu:20.04
     commands:
       - apt-get update
       - apt-get install -y git
       - git clone https://github.com/GoogleCloudPlatform/microservices-demo.git
-  frontendimagebuild:
+  shippingserviceimagebuild:
     image: golang:1.17.5-alpine
     commands:
-      - cd microservices-demo/src/frontend
+      - cd microservices-demo/src/shippingservice
       - apk add --no-cache ca-certificates
       - apk add build-base
       - go mod download
       - go build -ldflags "-linkmode external -extldflags -static" -a .
-  frontendimagepush:
+  shippingserviceimagepush:
     image: ubuntu:20.04
     secrets: [aws_access_key_id, aws_secret_access_key, bucket]
     commands:
@@ -22,8 +22,8 @@ pipeline:
       - apt-get update
       - apt-get install -y curl jq
       - curl https://ops.city/get.sh -sSfL | sh
-      - cat images/frontend/config.json | jq --arg bucket "$bucket" '.CloudConfig.BucketName = $bucket' > /tmp/config.json
-      - cd microservices-demo/src/frontend
+      - cat images/shippingservice/config.json | jq --arg bucket "$bucket" '.CloudConfig.BucketName = $bucket' > /tmp/config.json
+      - cd microservices-demo/src/shippingservice
       - cp /tmp/config.json . 
-      - /root/.ops/bin/ops image create frontend -i frontend -c config.json --show-debug -t aws
+      - /root/.ops/bin/ops image create shippingservice -i shippingservice -c config.json --show-debug -t aws
 branches: passed

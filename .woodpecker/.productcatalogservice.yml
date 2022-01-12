@@ -26,4 +26,4 @@ pipeline:
       - cd microservices-demo/src/productcatalogservice
       - cp /tmp/config.json . 
       - /root/.ops/bin/ops image create productcatalogservice -i productcatalogservice -c config.json --show-debug -t aws
-branches: master
+branches: passed

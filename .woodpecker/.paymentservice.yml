@@ -24,4 +24,4 @@ pipeline:
       - cd microservices-demo/src/paymentservice
       - cp /tmp/config.json . 
       - /root/.ops/bin/ops image create --package node_v14.2.0 -i paymentservice -c config.json --show-debug -t aws
-branches: master
+branches: passed
