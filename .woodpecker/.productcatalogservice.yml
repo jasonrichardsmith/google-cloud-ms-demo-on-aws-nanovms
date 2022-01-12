@@ -1,19 +1,19 @@
 pipeline:
-  checkoutserviceimageclone:
+  productcatalogserviceimageclone:
     image: ubuntu:20.04
     commands:
       - apt-get update
       - apt-get install -y git
       - git clone https://github.com/GoogleCloudPlatform/microservices-demo.git
-  checkoutserviceimagebuild:
+  productcatalogserviceimagebuild:
     image: golang:1.17.5-alpine
     commands:
-      - cd microservices-demo/src/checkoutservice
+      - cd microservices-demo/src/productcatalogservice
       - apk add --no-cache ca-certificates
       - apk add build-base
       - go mod download
       - go build -ldflags "-linkmode external -extldflags -static" -a .
-  checkoutserviceimagepush:
+  productcatalogserviceimagepush:
     image: ubuntu:20.04
     secrets: [aws_access_key_id, aws_secret_access_key, bucket]
     commands:
@@ -22,8 +22,8 @@ pipeline:
       - apt-get update
       - apt-get install -y curl jq
       - curl https://ops.city/get.sh -sSfL | sh
-      - cat images/checkoutservice/config.json | jq --arg bucket "$bucket" '.CloudConfig.BucketName = $bucket' > /tmp/config.json
-      - cd microservices-demo/src/checkoutservice
+      - cat images/productcatalogservice/config.json | jq --arg bucket "$bucket" '.CloudConfig.BucketName = $bucket' > /tmp/config.json
+      - cd microservices-demo/src/productcatalogservice
       - cp /tmp/config.json . 
-      - /root/.ops/bin/ops image create checkoutservice -i checkoutservice -c config.json --show-debug -t aws
-branches: passed
+      - /root/.ops/bin/ops image create productcatalogservice -i productcatalogservice -c config.json --show-debug -t aws
+branches: master

@@ -1,6 +1,6 @@
 {
 	"Env":{
-		"PORT": "7000",
+		"PORT": "50051",
 		"DISABLE_DEBUGGER": "1",
         	"DISABLE_TRACING": "1",
         	"DISABLE_PROFILER": "1"
@@ -9,17 +9,17 @@
 		"server.js"
 	],
 	"Files":[
-		"client.js",
-		"server.js"
+		"server.js",
+		"index.js",
+		"charge.js"
 	],
 	"Dirs":[
 		"node_modules",
-		"proto",
-		"data"
+		"proto"
 	],
 	"RunConfig": {
 		"Ports":[
-			"7000"
+			"50051"
 		]
 	},
     	"CloudConfig" :{

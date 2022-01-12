@@ -1,17 +1,17 @@
 pipeline:
-  currencyserviceimageclone:
+  paymentserviceimageclone:
     image: ubuntu:20.04
     commands:
       - apt-get update
       - apt-get install -y git
       - git clone https://github.com/GoogleCloudPlatform/microservices-demo.git
-  currencyserviceimagebuild:
+  paymentserviceimagebuild:
     image: node:16-alpine
     commands:
-      - cd microservices-demo/src/currencyservice
+      - cd microservices-demo/src/paymentservice
       - apk add --no-cache python3 make g++
       - npm install --only=production
-  currencyserviceimagepush:
+  paymentserviceimagepush:
     image: ubuntu:20.04
     secrets: [aws_access_key_id, aws_secret_access_key, bucket]
     commands:
@@ -20,8 +20,8 @@ pipeline:
       - apt-get update
       - apt-get install -y curl jq
       - curl https://ops.city/get.sh -sSfL | sh
-      - cat images/currencyservice/config.json | jq --arg bucket "$bucket" '.CloudConfig.BucketName = $bucket' > /tmp/config.json
-      - cd microservices-demo/src/currencyservice
+      - cat images/paymentservice/config.json | jq --arg bucket "$bucket" '.CloudConfig.BucketName = $bucket' > /tmp/config.json
+      - cd microservices-demo/src/paymentservice
       - cp /tmp/config.json . 
-      - /root/.ops/bin/ops image create --package node_v14.2.0 -i currencyservice -c config.json --show-debug -t aws
-branches: passed
+      - /root/.ops/bin/ops image create --package node_v14.2.0 -i paymentservice -c config.json --show-debug -t aws
+branches: master

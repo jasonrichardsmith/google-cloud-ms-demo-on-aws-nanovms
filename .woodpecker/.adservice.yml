@@ -25,4 +25,4 @@ pipeline:
       - cd microservices-demo/src/adservice
       - cp /tmp/config.json . 
       - /root/.ops/bin/ops image create --package java_1.8.0_191 -i adservice -c config.json --show-debug -t aws
-branches: master
+branches: passed
