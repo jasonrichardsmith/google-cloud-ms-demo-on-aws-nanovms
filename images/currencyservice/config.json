@@ -1,0 +1,26 @@
+{
+	"Env":{
+		"PORT": "7000",
+		"DISABLE_DEBUGGER": "1",
+        	"DISABLE_TRACING": "1",
+        	"DISABLE_PROFILER": "1"
+	},
+	"Files":[
+		"client.js",
+		"server.js"
+	],
+	"Dirs":[
+		"node_modules",
+		"proto",
+		"data"
+	],
+	"RunConfig": {
+		"Ports":[
+			"7000"
+		]
+	},
+    	"CloudConfig" :{
+        	"Zone": "eu-west-1",
+		"Platform": "aws"
+    	}
+}
