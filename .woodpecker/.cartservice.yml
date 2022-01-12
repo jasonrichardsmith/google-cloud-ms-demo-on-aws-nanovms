@@ -1,5 +1,5 @@
 pipeline:
-  cartservice:
+  cartserviceimage:
     image: ubuntu:20.04
     secrets: [aws_access_key_id, aws_secret_access_key, bucket]
     commands:
