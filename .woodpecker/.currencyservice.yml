@@ -23,5 +23,5 @@ pipeline:
       - cat images/currencyservice/config.json | jq --arg bucket "$bucket" '.CloudConfig.BucketName = $bucket' > /tmp/config.json
       - cd microservices-demo/src/currencyservice
       - cp /tmp/config.json . 
-      - /root/.ops/bin/ops image create --package node_v14.2.0 -i currencyservice -c /tmp/config.json --show-debug -t aws
+      - /root/.ops/bin/ops image create --package node_v14.2.0 -i currencyservice -c config.json --show-debug -t aws
 branches: master
