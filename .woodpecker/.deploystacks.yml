@@ -2,7 +2,7 @@ pipeline:
   getamis:
     image: ubuntu:20.04
     secrets: [aws_access_key_id, aws_secret_access_key]
-    env:
+    environment:
       AWS_DEFAULT_REGION: eu-west-1
     commands:
       - apt-get update
