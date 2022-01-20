@@ -1,0 +1,58 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'SearchHead instances'
+Parameters:
+  Env:
+    Type: String
+  VPC:
+    Type: AWS::EC2::VPC::Id
+  SubnetIds:
+    Type: List<AWS::EC2::Subnet::Id>
+  ConsulSecurityGroupId:
+    Type: AWS::EC2::SecurityGroup::Id
+
+
+Resources:
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 53
+      Protocol: TCP_UDP
+      VpcId: !Ref VPC
+      HealthCheckEnabled: true
+      HealthCheckPort: 8500
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 2
+
+  NLBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroup
+      LoadBalancerArn: !Ref NLB
+      Port: 53
+      Protocol: TCP_UDP
+
+
+  NLB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      IpAddressType: ipv4
+      Scheme: internal
+      SubnetMappings:
+      - SubnetId: !Select [0, !Ref SubnetIds]
+        PrivateIPv4Address: 192.168.1.10
+      - SubnetId: !Select [1, !Ref SubnetIds]
+        PrivateIPv4Address: 192.168.2.10
+      - SubnetId: !Select [2, !Ref SubnetIds]
+        PrivateIPv4Address: 192.168.3.10
+      Type: network
+      Tags:
+        - Key: Name
+          Value: !Sub '${Env}-Consul-NLB'
+
+
+Outputs:
+  TargetGroup:
+    Value: !Ref TargetGroup
+

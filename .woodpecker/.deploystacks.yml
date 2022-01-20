@@ -1,0 +1,17 @@
+pipeline:
+  getamis:
+    image: ubuntu:20.04
+    secrets: [aws_access_key_id, aws_secret_access_key]
+    env:
+      AWS_DEFAULT_REGION: eu-west-1
+    commands:
+      - apt-get update
+      - apt-get install awscli
+      - ./scripts/amiexports.sh > amiexports
+  deploy:
+    image: cloudreach/sceptre:2.7.1
+    secrets: [aws_access_key_id, aws_secret_access_key]
+    commands:
+      - eval $(cat amiexports)
+      - sceptre status test
+branches: master

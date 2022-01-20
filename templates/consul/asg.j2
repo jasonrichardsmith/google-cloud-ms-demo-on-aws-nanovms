@@ -1,0 +1,62 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Consul instances'
+Parameters:
+  Env:
+    Type: String
+  VPC:
+    Type: AWS::EC2::VPC::Id
+  SubnetIds:
+    Type: List<AWS::EC2::Subnet::Id>
+  SecurityGroupId:
+    Type: AWS::EC2::SecurityGroup::Id
+  Profile:
+    Type: String
+  AMI:
+    Type: 'AWS::EC2::Image::Id'
+  InstanceType:
+    Type: String
+    Default: t3a.nano
+  InstanceQty:
+    Type: Number
+    Default: 3
+  TargetGroup:
+    Type: String
+
+Resources:
+  ConsulConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      ImageId: !Ref AMI
+      IamInstanceProfile: !Ref Profile
+      SecurityGroups:
+        - !Ref SecurityGroupId
+      InstanceType: !Ref InstanceType
+      BlockDeviceMappings:
+        - DeviceName: "/dev/sda1"
+          Ebs:
+            VolumeSize: 8
+            VolumeType: gp3
+            DeleteOnTermination: "true"
+
+  ASConsul:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      VPCZoneIdentifier: !Ref SubnetIds
+      LaunchConfigurationName: !Ref 'ConsulConfig'
+      TerminationPolicies:
+        - OldestInstance
+      DesiredCapacity: !Ref InstanceQty
+      MinSize: '0'
+      MaxSize: !Ref InstanceQty
+      TargetGroupARNs:
+        - !Ref TargetGroup
+      Tags:
+        - Key: Name
+          Value: !Sub '${Env}-Consul'
+          PropagateAtLaunch: 'true'
+        - Key: consulcloud
+          Value: consulserver
+          PropagateAtLaunch: 'true'  
+Outputs:
+  ConsulASG:
+    Value: !Ref ASConsul

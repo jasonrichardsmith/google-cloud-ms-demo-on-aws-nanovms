@@ -1,0 +1,14 @@
+template_path: consul/asg.j2
+parameters:
+  Env: {{ envname }}
+  VPC: !stack_output {{ envname }}/network/vpc.yaml::VPC
+  SubnetIds:
+    - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet1
+    - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet2
+    - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet3
+  SecurityGroupId: !stack_output {{ envname }}/consul/consul.yaml::SecurityGroup
+  Profile: !stack_output {{ envname }}/consul/iam.yaml::Profile
+  AMI: !environment_variable CONSULAMI1
+  InstanceType: t2.micro
+  InstanceQty: '1'
+  TargetGroup: !stack_output {{ envname }}/consul/nlb.yaml::TargetGroup

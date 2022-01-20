@@ -1,0 +1,3 @@
+template_path: network/vpc.j2
+parameters:
+  Env: {{ envname }}

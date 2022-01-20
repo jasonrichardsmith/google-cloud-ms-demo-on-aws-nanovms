@@ -1,0 +1,9 @@
+template_path: consul/nlb.j2
+parameters:
+  Env: {{ envname }}
+  VPC: !stack_output {{ envname }}/network/vpc.yaml::VPC
+  SubnetIds:
+    - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet1
+    - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet2
+    - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet3
+  ConsulSecurityGroupId: !stack_output {{ envname }}/consul/consul.yaml::SecurityGroup

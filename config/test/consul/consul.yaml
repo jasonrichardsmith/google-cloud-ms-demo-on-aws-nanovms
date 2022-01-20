@@ -1,0 +1,10 @@
+template_path: consul/consul.j2
+parameters:
+  Env: {{ envname }}
+  VPC: !stack_output {{ envname }}/network/vpc.yaml::VPC
+  VPCCIDR: !stack_output {{ envname }}/network/vpc.yaml::VPCCIDR
+  IpAddresses:
+    - AmazonProvidedDNS
+    - 192.168.1.10
+    - 192.168.2.10
+    - 192.168.3.10

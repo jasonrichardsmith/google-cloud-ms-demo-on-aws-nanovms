@@ -1,0 +1,3 @@
+template_path: consul/iam.j2
+parameters:
+  Env: {{ envname }}
