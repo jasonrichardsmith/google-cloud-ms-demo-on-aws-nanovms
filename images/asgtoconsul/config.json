@@ -1,0 +1,13 @@
+{
+	"Env":{
+		"AWS_DEFAULT_REGION": "eu-west-1"
+	},
+	"Files":[
+		"asgtoconsul"
+	],
+    	"CloudConfig" :{
+        	"Zone": "eu-west-1",
+		"Platform": "aws"
+    	}
+}
+

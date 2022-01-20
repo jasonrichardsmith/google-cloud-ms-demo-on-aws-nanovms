@@ -1,0 +1,34 @@
+{
+  "Files": [
+	  "consul.config"
+  ],
+  "Dirs": [
+	  "etc",
+	  "usr",
+	  "lib",
+	  "lib64"
+  ],
+  "Args": [
+	  "agent",
+	  "-config-file=/consul.config",
+	  "-config-format=json"
+
+  ],
+  "RunConfig": {
+	  "Ports":[
+		  "53",
+		  "8300",
+		  "8301",
+		  "8302",
+		  "8400",
+		  "8500"
+	  ],
+	  "ShowDebug": true
+  },
+  "CloudConfig": {
+	  "Zone": "eu-west-1",
+	  "Platform": "aws"
+
+  },
+  "NameServer": "169.254.169.253"
+}

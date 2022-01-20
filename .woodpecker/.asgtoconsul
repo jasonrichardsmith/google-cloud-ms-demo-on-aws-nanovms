@@ -1,0 +1,22 @@
+pipeline:
+  asgtoconsulimagebuild:
+    image: golang:1.17.5-alpine
+    commands:
+      - cd images/asgtoconsul
+      - apk add --no-cache ca-certificates
+      - apk add build-base
+      - go mod download
+      - go build -ldflags "-linkmode external -extldflags -static" -a .
+  asgtoconsulimagepush:
+    image: ubuntu:20.04
+    secrets: [aws_access_key_id, aws_secret_access_key, bucket]
+    commands:
+      - echo $BUCKET > /tmp/bucket
+      - export bucket=$(cat /tmp/bucket)
+      - apt-get update
+      - apt-get install -y curl jq
+      - curl https://ops.city/get.sh -sSfL | sh
+      - cd images/asgtoconsul
+      - cat <<< $( jq --arg bucket "$bucket" '.CloudConfig.BucketName = $bucket' config.json) > config.json
+      - /root/.ops/bin/ops image create asgtoconsul -i asgtoconsul -c config.json --show-debug -t aws
+branches: master

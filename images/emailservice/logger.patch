@@ -1,0 +1,9 @@
+@@ -33,7 +33,7 @@
+ def getJSONLogger(name):
+   logger = logging.getLogger(name)
+   handler = logging.StreamHandler(sys.stdout)
+-  formatter = CustomJsonFormatter('(timestamp) (severity) (name) (message)')
++  formatter = CustomJsonFormatter('%(timestamp)s %(level)s %(name)s %(message)s')
+   handler.setFormatter(formatter)
+   logger.addHandler(handler)
+   logger.setLevel(logging.INFO)

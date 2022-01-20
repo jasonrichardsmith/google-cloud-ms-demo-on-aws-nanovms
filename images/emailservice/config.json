@@ -1,0 +1,25 @@
+{
+    "Env": {
+	"PORT": "5055",
+	"DISABLE_PROFILER": "1",
+	"GRPC_VERBOSITY":"debug",
+	"GRPC_ENABLE_FORK_SUPPORT": "False"
+    },
+    "Files": [
+	    "email_server.py",
+	    "email_client.py",
+	    "logger.py",
+	    "demo_pb2.py",
+	    "demo_pb2_grpc.py"
+    ],
+    "MapDirs": {
+        "./.venv/*": "/.local",
+        "./usr/lib64/*": "/usr/lib/x86_64-linux-gnu"
+    },
+    "Dirs": [
+	"templates"
+    ],
+    "Args": [
+        "email_server.py"
+    ]
+}

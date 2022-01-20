@@ -1,0 +1,5 @@
+{
+   "Program":"consul_1.11.2/consul",
+   "Args" : ["consul"],
+   "Version":"1.11.2"
+}
