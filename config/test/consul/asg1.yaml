@@ -8,7 +8,7 @@ parameters:
     - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet3
   SecurityGroupId: !stack_output {{ envname }}/consul/consul.yaml::SecurityGroup
   Profile: !stack_output {{ envname }}/consul/iam.yaml::Profile
-  AMI: !environment_variable CONSULAMI1
+  AMI: !environment_variable CONSUL1AMI
   InstanceType: t2.micro
   InstanceQty: '1'
   TargetGroup: !stack_output {{ envname }}/consul/nlb.yaml::TargetGroup
