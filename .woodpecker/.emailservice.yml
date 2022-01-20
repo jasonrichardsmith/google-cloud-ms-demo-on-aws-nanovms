@@ -13,10 +13,10 @@ pipeline:
       - cp images/emailservice/logger.patch microservices-demo/src/emailservice/
       - cd microservices-demo/src/emailservice
       - patch logger.py logger.patch
-      - python -m venv .venv --prompt nanovm
+      - python3 -m venv .venv --prompt nanovm
       - source .venv/bin/activate
-      - pip install --upgrade pip
-      - pip install -r requirements.txt
+      - pip3 install --upgrade pip
+      - pip3 install -r requirements.txt
       - deactivate
       - curl https://ops.city/get.sh -sSfL | sh
       - /root/.ops/bin/ops image create --package python_3.8.6 -i emailservice -c config.json --show-debug -t aws
