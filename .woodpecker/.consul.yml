@@ -8,15 +8,5 @@ pipeline:
       - apt-get update
       - apt-get install -y curl jq
       - curl https://ops.city/get.sh -sSfL | sh
-      - cd images/consul
-      - /bin/bash cat <<< $(jq --arg bucket "$bucket" '.CloudConfig.BucketName = $bucket' config.json) > /tmp/config.json
-      - mkdir -p ~/.ops/local_packages
-      - mv consul_1.11.2 ~/.ops/local_packages/
-      - /root/.ops/bin/ops pkg add consul_1.11.2 --name consul_1.11.2
-      - /bin/bash cat <<< $(jq --arg node "consul1" '.node_name = $node' consul.config) > consul.config
-      - /root/.ops/bin/ops image create --package consul_1.11.2 -l -i consul1 -c config.json --show-debug -t aws
-      - /bin/bash cat <<< $(jq --arg node "consul2" '.node_name = $node' consul.config) > consul.config
-      - /root/.ops/bin/ops image create --package consul_1.11.2 -l -i consul2 -c config.json --show-debug -t aws
-      - /bin/bash cat <<< $(jq --arg node "consul3" '.node_name = $node' consul.config) > consul.config
-      - /root/.ops/bin/ops image create --package consul_1.11.2 -l -i consul3 -c config.json --show-debug -t aws
-branches: wait
+      - ./scripts/consul.sh
+branches: master
