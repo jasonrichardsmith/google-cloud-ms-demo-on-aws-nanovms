@@ -6,7 +6,7 @@ pipeline:
       AWS_DEFAULT_REGION: eu-west-1
     commands:
       - apt-get update
-      - apt-get install awscli
+      - apt-get install -y awscli
       - ./scripts/amiexports.sh > amiexports
   deploy:
     image: cloudreach/sceptre:2.7.1
