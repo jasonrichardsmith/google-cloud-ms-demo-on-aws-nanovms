@@ -26,4 +26,4 @@ pipeline:
       - cd microservices-demo/src/shippingservice
       - cp /tmp/config.json . 
       - /root/.ops/bin/ops image create shippingservice -i shippingservice -c config.json --show-debug -t aws
-branches: master
+branches: passed
