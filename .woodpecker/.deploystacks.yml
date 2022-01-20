@@ -11,5 +11,6 @@ pipeline:
     secrets: [aws_access_key_id, aws_secret_access_key]
     commands:
       - eval $(cat amiexports)
+      - env | grep AMI
       - sceptre status test
 branches: master
