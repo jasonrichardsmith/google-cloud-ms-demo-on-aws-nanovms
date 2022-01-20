@@ -1,12 +1,10 @@
 pipeline:
   getamis:
-    image: ubuntu:20.04
+    image: amazon/aws-cli
     secrets: [aws_access_key_id, aws_secret_access_key]
     environment:
       AWS_DEFAULT_REGION: eu-west-1
     commands:
-      - apt-get update
-      - apt-get install -y awscli
       - ./scripts/amiexports.sh > amiexports
   deploy:
     image: cloudreach/sceptre:2.7.1
