@@ -19,4 +19,4 @@ pipeline:
       - /root/.ops/bin/ops image create --package consul_1.11.2 -l -i consul2 -c config.json --show-debug -t aws
       - /bin/bash cat <<< $(jq --arg node "consul3" '.node_name = $node' consul.config) > consul.config
       - /root/.ops/bin/ops image create --package consul_1.11.2 -l -i consul3 -c config.json --show-debug -t aws
-branches: master
+branches: wait

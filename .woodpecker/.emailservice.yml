@@ -3,6 +3,7 @@ pipeline:
     image: ubuntu:20.04
     secrets: [aws_access_key_id, aws_secret_access_key, bucket]
     commands:
+      - /bin/bash
       - apt-get update
       - apt-get install -y git python3 python3-pip python3-venv jq curl patch
       - git clone https://github.com/GoogleCloudPlatform/microservices-demo.git
