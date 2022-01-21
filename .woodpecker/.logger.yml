@@ -1,5 +1,5 @@
 pipeline:
-  asgtoconsulimagebuild:
+  loggerimagebuild:
     image: golang:1.17.5-alpine
     commands:
       - cd images/logger
@@ -7,7 +7,7 @@ pipeline:
       - apk add build-base
       - go mod download
       - go build -ldflags "-linkmode external -extldflags -static" -a .
-  asgtoconsulimagepush:
+  loggerimagepush:
     image: ubuntu:20.04
     secrets: [aws_access_key_id, aws_secret_access_key, bucket]
     commands:
