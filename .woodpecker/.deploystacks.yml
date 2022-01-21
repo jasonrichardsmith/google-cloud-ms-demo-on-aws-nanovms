@@ -12,5 +12,10 @@ pipeline:
     commands:
       - eval $(cat amiexports)
       - env | grep AMI
-      - sceptre status test
-branches: passed
+      - sceptre launch -y test/consul
+branches: master
+
+depends_on:
+  - consul
+  - asgtoconsul
+  - logger

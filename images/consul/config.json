@@ -19,7 +19,13 @@
       "8400",
       "8500"
     ],
-    "ShowDebug": true
+    "ShowDebug": true,
+    "Klibs": ["syslog"]
+  },
+  "ManifestPassthrough": {
+    "syslog": {
+      "server": "consul-logger.service.consul"
+    }
   },
   "CloudConfig": {
     "Zone": "eu-west-1",

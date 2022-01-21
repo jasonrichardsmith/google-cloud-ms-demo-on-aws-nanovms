@@ -1,80 +1,29 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'Logger for services'
+Description: 'Logger for consul components'
 Parameters:
   Env:
     Type: String
   VPC:
     Type: AWS::EC2::VPC::Id
-  VPCCIDR:
-    Type: String
   SubnetIds:
     Type: List<AWS::EC2::Subnet::Id>
-  AMI:
-    Type: 'AWS::EC2::Image::Id'
   LoggerAMI:
     Type: 'AWS::EC2::Image::Id'
   InstanceType:
     Type: String
     Default: t3a.nano
-  InstanceQty:
-    Type: Number
-    Default: 3
   ServiceName:
     Type: String
-  ServicePort:
-    Type: String
-
-Resources:
-  ServiceConfig:
-    Type: AWS::AutoScaling::LaunchConfiguration
-    Properties:
-      ImageId: !Ref AMI
-      SecurityGroups:
-        - !Ref ServiceSecurityGroup
-      InstanceType: !Ref InstanceType
-      BlockDeviceMappings:
-        - DeviceName: "/dev/sda1"
-          Ebs:
-            VolumeSize: 2
-            VolumeType: gp3
-            DeleteOnTermination: "true"
-
-  ASService:
-    Type: AWS::AutoScaling::AutoScalingGroup
-    Properties:
-      VPCZoneIdentifier: !Ref SubnetIds
-      LaunchConfigurationName: !Ref 'ServiceConfig'
-      TerminationPolicies:
-        - OldestInstance
-      DesiredCapacity: !Ref InstanceQty
-      MinSize: '0'
-      MaxSize: !Ref InstanceQty
-      Tags:
-        - Key: Name
-          Value: !Sub '${Env}-Service'
-          PropagateAtLaunch: 'true'
-        - Key: consulcloud
-          Value: service
-          PropagateAtLaunch: 'true'  
-        - Key: consulservicename
-          Value: !Ref ServiceName
-          PropagateAtLaunch: 'true'  
-        - Key: consulserviceport
-          Value: !Ref ServicePort
-          PropagateAtLaunch: 'true'  
   ServiceSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: !Sub '${ServiceName} ingress'
-      VpcId: !Ref VPC
-
+    Type: AWS::EC2::SecurityGroup::Id
+Resources:
   LoggerConfig:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
       ImageId: !Ref LoggerAMI
       IamInstanceProfile: !Ref LoggerProfile
       SecurityGroups:
-        - !Ref ServiceSecurityGroup
+        - !Ref LoggerSecurityGroup
       InstanceType: !Ref InstanceType
       BlockDeviceMappings:
         - DeviceName: "/dev/sda1"
@@ -82,7 +31,6 @@ Resources:
             VolumeSize: 1
             VolumeType: gp3
             DeleteOnTermination: "true"
-
   ASLogger:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
