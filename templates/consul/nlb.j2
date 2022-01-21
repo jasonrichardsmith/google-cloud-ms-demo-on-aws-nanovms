@@ -39,7 +39,11 @@ Resources:
       Port: 514
       Protocol: TCP_UDP
       VpcId: !Ref VPC
-      HealthCheckEnabled: false
+      HealthCheckEnabled: true
+      HealthCheckPort: 514
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 2
+      HealthCheckProtocol: TCP
 
   SyslogNLBListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
