@@ -1,6 +1,6 @@
 {
 	"Files":[
-		"asgtoconsul"
+		"syslog-cloudwatch-bridge"
 	],
         "RunConfig": {
           "Ports": ["514"]
