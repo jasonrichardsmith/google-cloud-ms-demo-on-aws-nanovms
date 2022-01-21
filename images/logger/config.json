@@ -1,14 +1,18 @@
 {
-	"Files":[
-		"syslog-cloudwatch-bridge"
-	],
-        "RunConfig": {
-          "Ports": ["514"]
-	},
-    	"CloudConfig" :{
-        	"Zone": "eu-west-1",
-		"Platform": "aws"
-    	},
-        "NameServer": "169.254.169.253"
+  "Env": {
+    "AWS_REGION": "eu-west-1"
+  },
+  "Files": [
+    "syslog-cloudwatch-bridge"
+  ],
+  "RunConfig": {
+    "Ports": [
+      "514"
+    ]
+  },
+  "CloudConfig": {
+    "Zone": "eu-west-1",
+    "Platform": "aws"
+  },
+  "NameServer": "169.254.169.253"
 }
-

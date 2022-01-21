@@ -99,13 +99,13 @@ func getServices(region string) ([]consul.AgentServiceRegistration, error) {
 				continue
 			} else {
 				var servicename string
-				var serviceport string
+				var serviceport int
 				for _, tag := range inst.Tags {
 					if *tag.Key == "consulservicename" {
 						servicename = *tag.Value
 					}
 					if *tag.Key == "consulserviceport" {
-						serviceport = *tag.Value
+						serviceport, _ = strconv.Atoi(*tag.Value)
 					}
 				}
 				if servicename == "" {
@@ -115,8 +115,8 @@ func getServices(region string) ([]consul.AgentServiceRegistration, error) {
 					service := consul.AgentServiceRegistration{
 						ID:      *inst.InstanceId,
 						Name:    servicename,
+						Port:    serviceport,
 						Address: *inst.PrivateIpAddress,
-						Port:    strconv.Atoi(serviceport),
 					}
 					services = append(services, service)
 				}

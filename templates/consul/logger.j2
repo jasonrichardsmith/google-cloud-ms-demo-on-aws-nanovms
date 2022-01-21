@@ -7,20 +7,22 @@ Parameters:
     Type: AWS::EC2::VPC::Id
   SubnetIds:
     Type: List<AWS::EC2::Subnet::Id>
-  LoggerAMI:
+  AMI:
     Type: 'AWS::EC2::Image::Id'
   InstanceType:
     Type: String
     Default: t3a.nano
   ServiceName:
     Type: String
-  ServiceSecurityGroup:
-    Type: AWS::EC2::SecurityGroup::Id
+  TargetGroup:
+    Type: String
+  VPCCIDR:
+    Type: String
 Resources:
   LoggerConfig:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
-      ImageId: !Ref LoggerAMI
+      ImageId: !Ref AMI
       IamInstanceProfile: !Ref LoggerProfile
       SecurityGroups:
         - !Ref LoggerSecurityGroup
@@ -36,6 +38,8 @@ Resources:
     Properties:
       VPCZoneIdentifier: !Ref SubnetIds
       LaunchConfigurationName: !Ref 'LoggerConfig'
+      TargetGroupARNs:
+        - !Ref TargetGroup
       TerminationPolicies:
         - OldestInstance
       DesiredCapacity: '1'
@@ -43,7 +47,7 @@ Resources:
       MaxSize: '1'
       Tags:
         - Key: Name
-          Value: !Sub '${Env}-Service-Logger'
+          Value: !Sub '${ServiceName}-Service-Logger'
           PropagateAtLaunch: 'true'
         - Key: consulcloud
           Value: service
@@ -67,7 +71,11 @@ Resources:
       - IpProtocol: tcp
         FromPort: 514
         ToPort: 514
-        SourceSecurityGroupId: !Ref ServiceSecurityGroup
+        CidrIp: !Ref VPCCIDR
+      - IpProtocol: udp
+        FromPort: 514
+        ToPort: 514
+        CidrIp: !Ref VPCCIDR
       SecurityGroupEgress:
       - IpProtocol: -1
         CidrIp: 0.0.0.0/0
@@ -110,8 +118,3 @@ Resources:
     Properties: 
       RetentionInDays: 1
 
-
-
-Outputs:
-  ServiceSecurityGroup:
-    Value: !Ref ServiceSecurityGroup

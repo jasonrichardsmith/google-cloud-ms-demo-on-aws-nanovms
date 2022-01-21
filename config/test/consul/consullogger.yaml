@@ -10,3 +10,5 @@ parameters:
   AMI: !environment_variable LOGGERAMI
   InstanceType: t2.micro
   ServiceName: consul
+  TargetGroup: !stack_output {{ envname }}/consul/nlb.yaml::SyslogTargetGroup
+  VPCCIDR: !stack_output {{ envname }}/network/vpc.yaml::VPCCIDR

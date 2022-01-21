@@ -12,7 +12,7 @@ Parameters:
 
 
 Resources:
-  TargetGroup:
+  DNSTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       Port: 53
@@ -23,16 +23,33 @@ Resources:
       HealthyThresholdCount: 2
       UnhealthyThresholdCount: 2
 
-  NLBListener:
+  DNSNLBListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
       DefaultActions:
         - Type: forward
-          TargetGroupArn: !Ref TargetGroup
+          TargetGroupArn: !Ref DNSTargetGroup
       LoadBalancerArn: !Ref NLB
       Port: 53
       Protocol: TCP_UDP
 
+  SyslogTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 514
+      Protocol: TCP_UDP
+      VpcId: !Ref VPC
+      HealthCheckEnabled: false
+
+  SyslogNLBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref SyslogTargetGroup
+      LoadBalancerArn: !Ref NLB
+      Port: 514
+      Protocol: TCP_UDP
 
   NLB:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
@@ -53,6 +70,8 @@ Resources:
 
 
 Outputs:
-  TargetGroup:
-    Value: !Ref TargetGroup
+  DNSTargetGroup:
+    Value: !Ref DNSTargetGroup
+  SyslogTargetGroup:
+    Value: !Ref SyslogTargetGroup
 
