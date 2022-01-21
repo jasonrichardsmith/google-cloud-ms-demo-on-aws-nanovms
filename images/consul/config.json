@@ -2,8 +2,8 @@
   "Files": [
     "consul.config"
   ],
-  "Dirs":[
-	  "etc"
+  "Dirs": [
+    "etc"
   ],
   "Args": [
     "agent",

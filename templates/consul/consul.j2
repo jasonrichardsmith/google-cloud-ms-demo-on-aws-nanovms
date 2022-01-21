@@ -17,14 +17,6 @@ Resources:
       GroupDescription: 'DNS ingress'
       VpcId: !Ref VPC
       SecurityGroupIngress:
-      - IpProtocol: udp
-        FromPort: 53
-        ToPort: 53
-        CidrIp: !Ref VPCCIDR
-      - IpProtocol: tcp
-        FromPort: 53
-        ToPort: 53
-        CidrIp: !Ref VPCCIDR
       - IpProtocol: tcp
         FromPort: 8500
         ToPort: 8500
@@ -38,6 +30,35 @@ Resources:
       GroupId: !Ref ConsulSecurityGroup
       IpProtocol: -1
       SourceSecurityGroupId: !GetAtt ConsulSecurityGroup.GroupId
+  Consul53UDPIngress:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref ConsulSecurityGroup
+      IpProtocol: udp
+      CidrIp: !Ref VPCCIDR
+      FromPort: 53
+      ToPort: 53
+  Consul53TCPIngress:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref ConsulSecurityGroup
+      IpProtocol: tcp
+      CidrIp: !Ref VPCCIDR
+      FromPort: 53
+      ToPort: 53
+  Consul8500TCPIngress:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref ConsulSecurityGroup
+      IpProtocol: tcp
+      CidrIp: !Ref VPCCIDR
+      FromPort: 8500
+      ToPort: 8500
+
+Outputs:
+  SecurityGroup:
+    Value: !Ref ConsulSecurityGroup
+
 Outputs:
   SecurityGroup:
     Value: !Ref ConsulSecurityGroup

@@ -14,4 +14,4 @@ pipeline:
       - cp -rf images/emailservice/usr microservices-demo/src/emailservice/
       - cp images/emailservice/logger.patch microservices-demo/src/emailservice/
       - ./scripts/emailservice.sh
-branches: master
+branches: passed

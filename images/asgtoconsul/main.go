@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -98,10 +99,13 @@ func getServices(region string) ([]consul.AgentServiceRegistration, error) {
 				continue
 			} else {
 				var servicename string
+				var serviceport string
 				for _, tag := range inst.Tags {
 					if *tag.Key == "consulservicename" {
 						servicename = *tag.Value
-						break
+					}
+					if *tag.Key == "consulserviceport" {
+						serviceport = *tag.Value
 					}
 				}
 				if servicename == "" {
@@ -112,6 +116,7 @@ func getServices(region string) ([]consul.AgentServiceRegistration, error) {
 						ID:      *inst.InstanceId,
 						Name:    servicename,
 						Address: *inst.PrivateIpAddress,
+						Port:    strconv.Atoi(serviceport),
 					}
 					services = append(services, service)
 				}
@@ -120,7 +125,6 @@ func getServices(region string) ([]consul.AgentServiceRegistration, error) {
 		}
 	}
 	return services, nil
-
 }
 
 func registerServices(serveraddress string, services []consul.AgentServiceRegistration) error {

@@ -1,0 +1,20 @@
+pipeline:
+  asgtoconsulimagebuild:
+    image: golang:1.17.5-alpine
+    commands:
+      - cd images/logger
+      - apk add --no-cache ca-certificates
+      - apk add build-base
+      - go mod download
+      - go build -ldflags "-linkmode external -extldflags -static" -a .
+  asgtoconsulimagepush:
+    image: ubuntu:20.04
+    secrets: [aws_access_key_id, aws_secret_access_key, bucket]
+    commands:
+      - echo $BUCKET > /tmp/bucket
+      - export bucket=$(cat /tmp/bucket)
+      - apt-get update
+      - apt-get install -y curl jq
+      - curl https://ops.city/get.sh -sSfL | sh
+      - ./scripts/logger.sh
+branches: master

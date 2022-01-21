@@ -1,0 +1,169 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Service instances'
+Parameters:
+  Env:
+    Type: String
+  VPC:
+    Type: AWS::EC2::VPC::Id
+  VPCCIDR:
+    Type: String
+  SubnetIds:
+    Type: List<AWS::EC2::Subnet::Id>
+  AMI:
+    Type: 'AWS::EC2::Image::Id'
+  LoggerAMI:
+    Type: 'AWS::EC2::Image::Id'
+  InstanceType:
+    Type: String
+    Default: t3a.nano
+  InstanceQty:
+    Type: Number
+    Default: 3
+  ServiceName:
+    Type: String
+  ServicePort:
+    Type: String
+
+Resources:
+  ServiceConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      ImageId: !Ref AMI
+      SecurityGroups:
+        - !Ref ServiceSecurityGroup
+      InstanceType: !Ref InstanceType
+      BlockDeviceMappings:
+        - DeviceName: "/dev/sda1"
+          Ebs:
+            VolumeSize: 2
+            VolumeType: gp3
+            DeleteOnTermination: "true"
+
+  ASService:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      VPCZoneIdentifier: !Ref SubnetIds
+      LaunchConfigurationName: !Ref 'ServiceConfig'
+      TerminationPolicies:
+        - OldestInstance
+      DesiredCapacity: !Ref InstanceQty
+      MinSize: '0'
+      MaxSize: !Ref InstanceQty
+      Tags:
+        - Key: Name
+          Value: !Sub '${Env}-Service'
+          PropagateAtLaunch: 'true'
+        - Key: consulcloud
+          Value: service
+          PropagateAtLaunch: 'true'  
+        - Key: consulservicename
+          Value: !Ref ServiceName
+          PropagateAtLaunch: 'true'  
+        - Key: consulserviceport
+          Value: !Ref ServicePort
+          PropagateAtLaunch: 'true'  
+  ServiceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: !Sub '${ServiceName} ingress'
+      VpcId: !Ref VPC
+
+  LoggerConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      ImageId: !Ref LoggerAMI
+      IamInstanceProfile: !Ref LoggerProfile
+      SecurityGroups:
+        - !Ref ServiceSecurityGroup
+      InstanceType: !Ref InstanceType
+      BlockDeviceMappings:
+        - DeviceName: "/dev/sda1"
+          Ebs:
+            VolumeSize: 1
+            VolumeType: gp3
+            DeleteOnTermination: "true"
+
+  ASLogger:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      VPCZoneIdentifier: !Ref SubnetIds
+      LaunchConfigurationName: !Ref 'LoggerConfig'
+      TerminationPolicies:
+        - OldestInstance
+      DesiredCapacity: '1'
+      MinSize: '0'
+      MaxSize: '1'
+      Tags:
+        - Key: Name
+          Value: !Sub '${Env}-Service-Logger'
+          PropagateAtLaunch: 'true'
+        - Key: consulcloud
+          Value: service
+          PropagateAtLaunch: 'true'
+        - Key: consulservicename
+          Value: !Sub '${ServiceName}-logger'
+          PropagateAtLaunch: 'true'
+        - Key: consulserviceport
+          Value: 514
+          PropagateAtLaunch: 'true'
+        - Key: loggroup
+          Value: !Ref LogGroup
+          PropagateAtLaunch: 'true'
+
+  LoggerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: !Sub '${ServiceName} logger ingress'
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 514
+        ToPort: 514
+        SourceSecurityGroupId: !Ref ServiceSecurityGroup
+      SecurityGroupEgress:
+      - IpProtocol: -1
+        CidrIp: 0.0.0.0/0
+
+
+  LoggerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: ConsulDescribeInstances
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ec2:DescribeInstances
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogStream
+		  - logs:PutLogEvents
+                Resource: !GetAtt LogGroup.Arn
+  LoggerProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+        - !Ref LoggerRole
+
+  LogGroup: 
+    Type: AWS::Logs::LogGroup
+    Properties: 
+      RetentionInDays: 1
+
+
+
+Outputs:
+  ServiceSecurityGroup:
+    Value: !Ref ServiceSecurityGroup
