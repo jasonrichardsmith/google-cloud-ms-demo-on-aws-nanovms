@@ -6,7 +6,6 @@ parameters:
     - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet1
     - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet2
     - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet3
-  ServiceSecurityGroup: !stack_output {{ envname }}/consul/consul.yaml::SecurityGroup
   AMI: !environment_variable LOGGERAMI
   InstanceType: t2.micro
   ServiceName: consul
