@@ -9,4 +9,4 @@ pipeline:
       - apt-get install -y curl jq
       - curl https://ops.city/get.sh -sSfL | sh
       - ./scripts/consul.sh
-branches: master
+branches: passed

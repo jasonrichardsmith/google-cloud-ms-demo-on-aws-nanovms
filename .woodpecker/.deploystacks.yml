@@ -15,7 +15,3 @@ pipeline:
       - sceptre launch -y test/consul
 branches: master
 
-depends_on:
-  - consul
-  - asgtoconsul
-  - logger
