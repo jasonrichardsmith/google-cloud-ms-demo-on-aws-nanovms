@@ -8,6 +8,9 @@
 			"7070"
 		]
 	},
+        "Dirs":[
+	  "etc"
+        ],
 	"MapDirs": {
 		"/publish/*": "/" 
 	},

@@ -10,6 +10,9 @@
 		"productcatalogservice",
 		"products.json"
 	],
+	"Dirs": [
+		"etc"
+	],
 	"RunConfig": {
 		"Ports":[
 			"3550"

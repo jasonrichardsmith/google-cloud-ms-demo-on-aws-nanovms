@@ -19,13 +19,7 @@
       "8400",
       "8500"
     ],
-    "ShowDebug": true,
-    "Klibs": ["syslog"]
-  },
-  "ManifestPassthrough": {
-    "syslog": {
-      "server": "192.168.1.10"
-    }
+    "ShowDebug": true
   },
   "CloudConfig": {
     "Zone": "eu-west-1",

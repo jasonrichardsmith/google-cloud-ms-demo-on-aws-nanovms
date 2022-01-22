@@ -15,7 +15,8 @@
 	],
 	"Dirs":[
 		"node_modules",
-		"proto"
+		"proto",
+		"etc"
 	],
 	"RunConfig": {
 		"Ports":[
