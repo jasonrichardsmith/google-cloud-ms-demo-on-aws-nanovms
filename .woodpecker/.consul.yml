@@ -1,12 +1,9 @@
 pipeline:
   consulimagepush:
-    image: ubuntu:20.04
+    image: jasonrichardsmith/ops:0.1.28
     secrets: [aws_access_key_id, aws_secret_access_key, bucket]
     commands:
       - echo $BUCKET > /tmp/bucket
       - export bucket=$(cat /tmp/bucket)
-      - apt-get update
-      - apt-get install -y curl jq
-      - curl https://ops.city/get.sh -sSfL | sh
       - ./scripts/consul.sh
 branches: master
