@@ -1,5 +1,8 @@
 #!/bin/bash
 cd images/consul
+ls -al
+pwd
+exit
 cat <<< $(jq --arg bucket "$bucket" '.CloudConfig.BucketName = $bucket' config.json) > config.json
 mkdir -p ~/.ops/local_packages
 mv consul_1.11.2 ~/.ops/local_packages/
