@@ -1,6 +1,6 @@
 pipeline:
   consulimagepush:
-    image: jasonrichardsmith/ops:0.1.28.2
+    image: jasonrichardsmith/ops:0.1.28.3
     secrets: [aws_access_key_id, aws_secret_access_key, bucket]
     commands:
       - echo $BUCKET > /tmp/bucket
