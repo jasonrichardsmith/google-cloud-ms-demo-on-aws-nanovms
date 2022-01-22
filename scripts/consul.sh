@@ -1,19 +1,8 @@
 #!/bin/bash
 cd images/consul
-ls -al
-pwd
 cat <<< $(jq --arg bucket "$bucket" '.CloudConfig.BucketName = $bucket' config.json) > config.json
 mkdir -p ~/.ops/local_packages
-echo "moving consul package"
 mv ./consul_1.11.2 ~/.ops/local_packages/
-echo "adding package to ops"
-export OPS_DIR="$HOME/.ops"
-echo $OPS_DIR
-echo $HOME
-cd ~/.ops/
-pwd
-ls -al
-ls -al local_packages
 ops version
 ops pkg add consul_1.11.2 --name consul_1.11.2
 exit
