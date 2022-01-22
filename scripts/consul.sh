@@ -2,7 +2,7 @@
 cd images/consul
 cat <<< $(jq --arg bucket "$bucket" '.CloudConfig.BucketName = $bucket' config.json) > config.json
 mkdir -p ~/.ops/local_packages
-mv ./consul_1.11.2 ~/.ops/local_packages/
+cp ./consul_1.11.2 ~/.ops/local_packages/
 ops version
 /root/.ops/bin/ops pkg add consul_1.11.2 --name consul_1.11.2
 exit
