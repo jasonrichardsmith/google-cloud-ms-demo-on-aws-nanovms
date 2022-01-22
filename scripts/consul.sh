@@ -7,7 +7,7 @@ mkdir -p ~/.ops/local_packages
 echo "moving consul package"
 mv ./consul_1.11.2 ~/.ops/local_packages/
 echo "adding package to ops"
-export OPS_HOME=~/.ops/
+export OPS_DIR="$HOME/.ops"
 ops pkg add consul_1.11.2 --name consul_1.11.2
 exit
 cat <<< $(jq --arg node "consul1" '.node_name = $node' consul.config) > consul.config
