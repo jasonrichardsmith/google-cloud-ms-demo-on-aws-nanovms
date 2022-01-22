@@ -13,7 +13,8 @@ echo $HOME
 cd ~/.ops/
 pwd
 ls -al
-ls -al .local_packages
+ls -al local_packages
+ops version
 ops pkg add consul_1.11.2 --name consul_1.11.2
 exit
 cat <<< $(jq --arg node "consul1" '.node_name = $node' consul.config) > consul.config
