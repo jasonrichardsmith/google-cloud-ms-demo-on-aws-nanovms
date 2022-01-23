@@ -14,4 +14,4 @@ pipeline:
       - echo $BUCKET > /tmp/bucket
       - export bucket=$(cat /tmp/bucket)
       - ./scripts/asgtoconsul.sh
-branches: master
+branches: done
