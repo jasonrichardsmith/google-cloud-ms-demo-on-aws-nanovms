@@ -1,9 +1,7 @@
 pipeline:
   currencyserviceimageclone:
-    image: ubuntu:20.04
+    image: bitnami/git:latest
     commands:
-      - apt-get update
-      - apt-get install -y git
       - git clone https://github.com/GoogleCloudPlatform/microservices-demo.git
   currencyserviceimagebuild:
     image: node:16-alpine
@@ -12,16 +10,10 @@ pipeline:
       - apk add --no-cache python3 make g++
       - npm install --only=production
   currencyserviceimagepush:
-    image: ubuntu:20.04
+    image: jasonrichardsmith/ops:0.1.28.3
     secrets: [aws_access_key_id, aws_secret_access_key, bucket]
     commands:
       - echo $BUCKET > /tmp/bucket
       - export bucket=$(cat /tmp/bucket)
-      - apt-get update
-      - apt-get install -y curl jq
-      - curl https://ops.city/get.sh -sSfL | sh
-      - cat images/currencyservice/config.json | jq --arg bucket "$bucket" '.CloudConfig.BucketName = $bucket' > /tmp/config.json
-      - cd microservices-demo/src/currencyservice
-      - cp /tmp/config.json . 
-      - /root/.ops/bin/ops image create --package node_v14.2.0 -i currencyservice -c config.json --show-debug -t aws
-branches: passed
+      - ./scripts/currecncyservice.sh
+branches: master

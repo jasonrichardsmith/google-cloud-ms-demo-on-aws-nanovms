@@ -1,9 +1,7 @@
 pipeline:
   adserviceimageclone:
-    image: ubuntu:20.04
+    image: bitnami/git:latest
     commands:
-      - apt-get update
-      - apt-get install -y git
       - git clone https://github.com/GoogleCloudPlatform/microservices-demo.git
   adserviceimagebuild:
     image: openjdk:8-slim
@@ -13,16 +11,10 @@ pipeline:
       - ./gradlew downloadRepos
       - ./gradlew installDist
   adserviceimagepush:
-    image: ubuntu:20.04
+    image: jasonrichardsmith/ops:0.1.28.3
     secrets: [aws_access_key_id, aws_secret_access_key, bucket]
     commands:
       - echo $BUCKET > /tmp/bucket
       - export bucket=$(cat /tmp/bucket)
-      - apt-get update
-      - apt-get install -y curl jq
-      - curl https://ops.city/get.sh -sSfL | sh
-      - cat images/adservice/config.json | jq --arg bucket "$bucket" '.CloudConfig.BucketName = $bucket' > /tmp/config.json
-      - cd microservices-demo/src/adservice
-      - cp /tmp/config.json . 
-      - /root/.ops/bin/ops image create --package java_1.8.0_191 -i adservice -c config.json --show-debug -t aws
-branches: passed
+      - ./scripts/adservice.sh
+branches: master
