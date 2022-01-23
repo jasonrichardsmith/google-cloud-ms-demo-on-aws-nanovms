@@ -1,9 +1,7 @@
 pipeline:
   productcatalogserviceimageclone:
-    image: ubuntu:20.04
+    image: bitnami/git:latest
     commands:
-      - apt-get update
-      - apt-get install -y git
       - git clone https://github.com/GoogleCloudPlatform/microservices-demo.git
   productcatalogserviceimagebuild:
     image: golang:1.17.5-alpine
@@ -14,16 +12,16 @@ pipeline:
       - go mod download
       - go build -ldflags "-linkmode external -extldflags -static" -a .
   productcatalogserviceimagepush:
+    image: jasonrichardsmith/ops:0.1.28.3
+    secrets: [aws_access_key_id, aws_secret_access_key, bucket]
+    commands:
+      - echo $BUCKET > /tmp/bucket
+      - export bucket=$(cat /tmp/bucket)
+      - ./scripts/productcatalogservice.sh
     image: ubuntu:20.04
     secrets: [aws_access_key_id, aws_secret_access_key, bucket]
     commands:
       - echo $BUCKET > /tmp/bucket
       - export bucket=$(cat /tmp/bucket)
-      - apt-get update
-      - apt-get install -y curl jq
-      - curl https://ops.city/get.sh -sSfL | sh
-      - cat images/productcatalogservice/config.json | jq --arg bucket "$bucket" '.CloudConfig.BucketName = $bucket' > /tmp/config.json
-      - cd microservices-demo/src/productcatalogservice
-      - cp /tmp/config.json . 
-      - /root/.ops/bin/ops image create productcatalogservice -i productcatalogservice -c config.json --show-debug -t aws
-branches: passed
+      - ./scripts/productcatalogservice.sh
+branches: master

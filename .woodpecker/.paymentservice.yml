@@ -16,5 +16,4 @@ pipeline:
       - echo $BUCKET > /tmp/bucket
       - export bucket=$(cat /tmp/bucket)
       - ./scripts/paymentservice.sh
-branches: master
-
+branches: done
