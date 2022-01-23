@@ -1,9 +1,7 @@
 pipeline:
   paymentserviceimageclone:
-    image: ubuntu:20.04
+    image: bitnami/git:latest
     commands:
-      - apt-get update
-      - apt-get install -y git
       - git clone https://github.com/GoogleCloudPlatform/microservices-demo.git
   paymentserviceimagebuild:
     image: node:16-alpine
@@ -17,11 +15,6 @@ pipeline:
     commands:
       - echo $BUCKET > /tmp/bucket
       - export bucket=$(cat /tmp/bucket)
-      - apt-get update
-      - apt-get install -y curl jq
-      - curl https://ops.city/get.sh -sSfL | sh
-      - cat images/paymentservice/config.json | jq --arg bucket "$bucket" '.CloudConfig.BucketName = $bucket' > /tmp/config.json
-      - cd microservices-demo/src/paymentservice
-      - cp /tmp/config.json . 
-      - /root/.ops/bin/ops image create --package node_v14.2.0 -i paymentservice -c config.json --show-debug -t aws
-branches: passed
+      - ./scripts/currencyservice.sh
+branches: master
+

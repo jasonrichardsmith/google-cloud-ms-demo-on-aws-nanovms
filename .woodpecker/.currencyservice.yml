@@ -16,4 +16,4 @@ pipeline:
       - echo $BUCKET > /tmp/bucket
       - export bucket=$(cat /tmp/bucket)
       - ./scripts/currencyservice.sh
-branches: master
+branches: done
