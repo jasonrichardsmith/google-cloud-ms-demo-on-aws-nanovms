@@ -1,17 +1,22 @@
 pipeline:
   emailserviceimageclone:
+    image: bitnami/git:latest
+    commands:
+      - git clone https://github.com/GoogleCloudPlatform/microservices-demo.git
+  emailserviceimagebuild:
     image: ubuntu:20.04
     secrets: [aws_access_key_id, aws_secret_access_key, bucket]
     commands:
       - TZ=Europe/Amsterdam
       - ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
       - apt-get update
-      - apt-get install -y git python3 python3-pip python3-venv jq curl patch
-      - git clone https://github.com/GoogleCloudPlatform/microservices-demo.git
+      - apt-get install -y python3 python3-pip python3-venv patch
+      - ./scripts/emailservicepythonbuild.sh
+  emailserviceimagepush:
+    image: jasonrichardsmith/ops:0.1.28.3
+    secrets: [aws_access_key_id, aws_secret_access_key, bucket]
+    commands:
       - echo $BUCKET > /tmp/bucket
       - export bucket=$(cat /tmp/bucket)
-      - cat images/emailservice/config.json | jq --arg bucket "$bucket" '.CloudConfig.BucketName = $bucket' > microservices-demo/src/emailservice/config.json
-      - cp -rf images/emailservice/usr microservices-demo/src/emailservice/
-      - cp images/emailservice/logger.patch microservices-demo/src/emailservice/
       - ./scripts/emailservice.sh
-branches: passed
+branches: master
