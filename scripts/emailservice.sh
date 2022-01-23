@@ -4,4 +4,5 @@ jq --arg bucket "$bucket" '.CloudConfig.BucketName = $bucket' images/emailservic
 cp -rf images/emailservice/etc microservices-demo/src/emailservice/
 cp -rf images/emailservice/usr microservices-demo/src/emailservice/
 cd microservices-demo/src/emailservice
+rm -rf ./.venv/bin
 ops image create --package python_3.8.6 -i emailservice -c config.json --show-debug -t aws
