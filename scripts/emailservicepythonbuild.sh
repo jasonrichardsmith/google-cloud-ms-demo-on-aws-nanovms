@@ -2,6 +2,7 @@
 cp images/emailservice/logger.patch microservices-demo/src/emailservice/
 cd microservices-demo/src/emailservice
 patch logger.py logger.patch
+cat logger.py
 python3 -m venv .venv --prompt nanovm
 source .venv/bin/activate
 pip3 install --upgrade pip
