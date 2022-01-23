@@ -46,18 +46,6 @@ Resources:
       CidrIp: !Ref VPCCIDR
       FromPort: 53
       ToPort: 53
-  Consul8500TCPIngress:
-    Type: AWS::EC2::SecurityGroupIngress
-    Properties:
-      GroupId: !Ref ConsulSecurityGroup
-      IpProtocol: tcp
-      CidrIp: !Ref VPCCIDR
-      FromPort: 8500
-      ToPort: 8500
-
-Outputs:
-  SecurityGroup:
-    Value: !Ref ConsulSecurityGroup
 
 Outputs:
   SecurityGroup:

@@ -1,28 +1,28 @@
 {
     "Env": {
-	"PORT": "5055",
+	"PORT": "8080",
 	"DISABLE_PROFILER": "1",
-	"GRPC_VERBOSITY":"debug",
+	"DISABLE_TRACING": "1",
+	"PRODUCT_CATALOG_SERVICE_ADDR":"productcatalogservice.service.consul:3550",
 	"GRPC_ENABLE_FORK_SUPPORT": "False"
     },
     "Files": [
-	    "email_server.py",
-	    "email_client.py",
+	    "client.py",
+	    "recommendation_server.py",
 	    "logger.py",
 	    "demo_pb2.py",
 	    "demo_pb2_grpc.py"
     ],
-    "RunConfig": {
-	    "Ports":[
-		    "5055"
-	    ]
-    },
     "MapDirs": {
         "./.venv/*": "/.local",
         "./usr/lib64/*": "/usr/lib/x86_64-linux-gnu"
     },
+    "RunConfig": {
+	    "Ports":[
+		    "8080"
+	    ]
+    },
     "Dirs": [
-	"templates",
 	"etc"
     ],
     "CloudConfig": {
@@ -30,6 +30,6 @@
 	    "Platform": "aws"
     },
     "Args": [
-        "email_server.py"
+        "recommendation_server.py"
     ]
 }

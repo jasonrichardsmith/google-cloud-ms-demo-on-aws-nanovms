@@ -7,6 +7,8 @@ Parameters:
     Type: AWS::EC2::VPC::Id
   SubnetIds:
     Type: List<AWS::EC2::Subnet::Id>
+  PublicSubnetIds:
+    Type: List<AWS::EC2::Subnet::Id>
   AMI:
     Type: 'AWS::EC2::Image::Id'
   InstanceType:
@@ -17,8 +19,10 @@ Parameters:
     Default: 3
   ServiceName:
     Type: String
-  ServicePort:
+  HealthCheckPath:
     Type: String
+  Port:
+    Type: Number
 
 Resources:
   ServiceConfig:
@@ -49,15 +53,6 @@ Resources:
         - Key: Name
           Value: !Sub '${Env}-${ServiceName}-Service'
           PropagateAtLaunch: 'true'
-        - Key: consulcloud
-          Value: service
-          PropagateAtLaunch: 'true'  
-        - Key: consulservicename
-          Value: !Ref ServiceName
-          PropagateAtLaunch: 'true'  
-        - Key: consulserviceport
-          Value: !Ref ServicePort
-          PropagateAtLaunch: 'true'  
   ServiceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -66,6 +61,47 @@ Resources:
       SecurityGroupEgress:
       - IpProtocol: -1
         CidrIp: 0.0.0.0/0
+      SecurityGroupIngress:
+      - IpProtocol: !Ref Port
+        CidrIp: 0.0.0.0/0
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: '30'
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: '5'
+      HealthyThresholdCount: '3'
+      HealthCheckPath: !Ref HealthCheckPath
+      HealthCheckPort: !Ref Port
+      Port: !Ref Port
+      Protocol: HTTP
+      VpcId: !Ref VPC
+      TargetGroupAttributes:
+        - Key: stickiness.enabled
+          Value: 'true'
+        - Key: stickiness.type
+          Value: lb_cookie
+
+  Listener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroup
+      LoadBalancerArn: !Ref ALB
+      Port: !Ref Port
+      Protocol: HTTP
+
+  ALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Scheme: internet-facing
+      Subnets: !Ref PublicSubnetIds
+      SecurityGroups: 
+      - !Ref ServiceSecurityGroup
+      Tags:
+        - Key: Name
+          Value: !Sub '${ServiceName}-ALB'
 
 Outputs:
   ServiceSecurityGroup:

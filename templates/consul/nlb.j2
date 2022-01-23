@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'SearchHead instances'
+Description: 'NLB'
 Parameters:
   Env:
     Type: String
@@ -7,8 +7,6 @@ Parameters:
     Type: AWS::EC2::VPC::Id
   SubnetIds:
     Type: List<AWS::EC2::Subnet::Id>
-  ConsulSecurityGroupId:
-    Type: AWS::EC2::SecurityGroup::Id
 
 
 Resources:
@@ -19,9 +17,10 @@ Resources:
       Protocol: TCP_UDP
       VpcId: !Ref VPC
       HealthCheckEnabled: true
-      HealthCheckPort: 8500
+      HealthCheckPort: 53
       HealthyThresholdCount: 2
       UnhealthyThresholdCount: 2
+      HealthCheckProtocol: TCP
 
   DNSNLBListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
@@ -31,28 +30,6 @@ Resources:
           TargetGroupArn: !Ref DNSTargetGroup
       LoadBalancerArn: !Ref NLB
       Port: 53
-      Protocol: TCP_UDP
-
-  SyslogTargetGroup:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    Properties:
-      Port: 514
-      Protocol: TCP_UDP
-      VpcId: !Ref VPC
-      HealthCheckEnabled: true
-      HealthCheckPort: 514
-      HealthyThresholdCount: 2
-      UnhealthyThresholdCount: 2
-      HealthCheckProtocol: TCP
-
-  SyslogNLBListener:
-    Type: AWS::ElasticLoadBalancingV2::Listener
-    Properties:
-      DefaultActions:
-        - Type: forward
-          TargetGroupArn: !Ref SyslogTargetGroup
-      LoadBalancerArn: !Ref NLB
-      Port: 514
       Protocol: TCP_UDP
 
   NLB:
@@ -71,11 +48,7 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub '${Env}-Consul-NLB'
-
-
 Outputs:
   DNSTargetGroup:
     Value: !Ref DNSTargetGroup
-  SyslogTargetGroup:
-    Value: !Ref SyslogTargetGroup
 

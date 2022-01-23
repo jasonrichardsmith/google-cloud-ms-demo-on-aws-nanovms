@@ -1,4 +1,4 @@
-template_path: consul/nlb.j2
+template_path: services/internalserviceasg.j2
 parameters:
   Env: {{ envname }}
   VPC: !stack_output {{ envname }}/network/vpc.yaml::VPC
@@ -6,3 +6,9 @@ parameters:
     - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet1
     - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet2
     - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet3
+  AMI: !environment_variable CHECKOUTSERVICEAMI
+  InstanceType: t2.micro
+  InstanceQty: '1'
+  ServiceName: 'checkoutservice'
+  ServicePort: '5050'
+  
