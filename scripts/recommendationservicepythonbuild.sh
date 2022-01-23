@@ -1,6 +1,6 @@
 #!/bin/bash
-cp images/emailservice/logger.patch microservices-demo/src/emailservice/
-cd microservices-demo/src/emailservice
+cp images/recommendationservice/logger.patch microservices-demo/src/recommendationservice/
+cd microservices-demo/src/recommendationservice
 patch logger.py logger.patch
 python3 -m venv .venv --prompt nanovm
 source .venv/bin/activate

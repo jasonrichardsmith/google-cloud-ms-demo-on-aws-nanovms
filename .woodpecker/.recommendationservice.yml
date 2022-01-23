@@ -1,0 +1,19 @@
+pipeline:
+  recommendationserviceimageclone:
+    image: bitnami/git:latest
+    commands:
+      - git clone https://github.com/GoogleCloudPlatform/microservices-demo.git
+  recommendationserviceimagebuild:
+    image: python:3.7-slim
+    commands:
+      - apt-get update -qqy
+      - apt-get -qqy install wget g++ patch
+      - ./scripts/recommendationservicepythonbuild.sh
+  recommendationserviceimagepush:
+    image: jasonrichardsmith/ops:0.1.28.3
+    secrets: [aws_access_key_id, aws_secret_access_key, bucket]
+    commands:
+      - echo $BUCKET > /tmp/bucket
+      - export bucket=$(cat /tmp/bucket)
+      - ./scripts/recommendationservice.sh
+branches: master
