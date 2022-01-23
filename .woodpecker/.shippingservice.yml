@@ -1,9 +1,7 @@
 pipeline:
   shippingserviceimageclone:
-    image: ubuntu:20.04
+    image: bitnami/git:latest
     commands:
-      - apt-get update
-      - apt-get install -y git
       - git clone https://github.com/GoogleCloudPlatform/microservices-demo.git
   shippingserviceimagebuild:
     image: golang:1.17.5-alpine
@@ -14,16 +12,9 @@ pipeline:
       - go mod download
       - go build -ldflags "-linkmode external -extldflags -static" -a .
   shippingserviceimagepush:
-    image: ubuntu:20.04
+    image: jasonrichardsmith/ops:0.1.28.3
     secrets: [aws_access_key_id, aws_secret_access_key, bucket]
     commands:
       - echo $BUCKET > /tmp/bucket
       - export bucket=$(cat /tmp/bucket)
-      - apt-get update
-      - apt-get install -y curl jq
-      - curl https://ops.city/get.sh -sSfL | sh
-      - cat images/shippingservice/config.json | jq --arg bucket "$bucket" '.CloudConfig.BucketName = $bucket' > /tmp/config.json
-      - cd microservices-demo/src/shippingservice
-      - cp /tmp/config.json . 
-      - /root/.ops/bin/ops image create shippingservice -i shippingservice -c config.json --show-debug -t aws
-branches: passed
+      - ./scripts/shippingservice.sh
