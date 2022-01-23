@@ -15,6 +15,6 @@ pipeline:
     commands:
       - echo $BUCKET > /tmp/bucket
       - export bucket=$(cat /tmp/bucket)
-      - ./scripts/currencyservice.sh
+      - ./scripts/paymentservice.sh
 branches: master
 
