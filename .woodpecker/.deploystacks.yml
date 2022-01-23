@@ -13,6 +13,6 @@ pipeline:
       - eval $(cat amiexports)
       - env | grep AMI
       - sceptre launch -y test/consul
-branches: passed
+branches: done
 depends_on:
   - consul
