@@ -16,4 +16,4 @@ pipeline:
       - echo $BUCKET > /tmp/bucket
       - export bucket=$(cat /tmp/bucket)
       - ./scripts/emailservice.sh
-branches: master
+branches: paused
