@@ -18,10 +18,4 @@ pipeline:
       - echo $BUCKET > /tmp/bucket
       - export bucket=$(cat /tmp/bucket)
       - ./scripts/productcatalogservice.sh
-    image: ubuntu:20.04
-    secrets: [aws_access_key_id, aws_secret_access_key, bucket]
-    commands:
-      - echo $BUCKET > /tmp/bucket
-      - export bucket=$(cat /tmp/bucket)
-      - ./scripts/productcatalogservice.sh
 branches: master
