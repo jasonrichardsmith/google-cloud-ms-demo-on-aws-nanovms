@@ -17,4 +17,4 @@ pipeline:
       - echo $BUCKET > /tmp/bucket
       - export bucket=$(cat /tmp/bucket)
       - ./scripts/adservice.sh
-branches: master
+branches: done

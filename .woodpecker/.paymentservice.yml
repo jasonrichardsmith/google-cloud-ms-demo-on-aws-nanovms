@@ -10,7 +10,7 @@ pipeline:
       - apk add --no-cache python3 make g++
       - npm install --only=production
   paymentserviceimagepush:
-    image: ubuntu:20.04
+    image: jasonrichardsmith/ops:0.1.28.3
     secrets: [aws_access_key_id, aws_secret_access_key, bucket]
     commands:
       - echo $BUCKET > /tmp/bucket
