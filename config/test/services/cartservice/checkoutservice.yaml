@@ -1,0 +1,6 @@
+template_path: services/ingress.j2
+parameters:
+  DestinationSecurityGroup: !stack_output {{ envname }}/services/cartservice/asg.yaml::SecurityGroup
+  SourceSecurityGroup: !stack_output {{ envname }}/services/checkoutservice/asg.yaml::SecurityGroup
+  Port: '7070'
+  

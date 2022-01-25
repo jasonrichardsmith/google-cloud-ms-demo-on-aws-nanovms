@@ -17,11 +17,13 @@ Parameters:
     Default: 3
   ServiceName:
     Type: String
-  ServicePort:
+  ConsulConfig:
+    Type: String
+  ASGToConsulRole:
     Type: String
 
 Resources:
-  ServiceConfig:
+  ServiceLaunchConfig:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
       ImageId: !Ref AMI
@@ -39,7 +41,7 @@ Resources:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
       VPCZoneIdentifier: !Ref SubnetIds
-      LaunchConfigurationName: !Ref 'ServiceConfig'
+      LaunchConfigurationName: !Ref ServiceLaunchConfig
       TerminationPolicies:
         - OldestInstance
       DesiredCapacity: !Ref InstanceQty
@@ -52,11 +54,8 @@ Resources:
         - Key: consulcloud
           Value: service
           PropagateAtLaunch: 'true'  
-        - Key: consulservicename
-          Value: !Ref ServiceName
-          PropagateAtLaunch: 'true'  
-        - Key: consulserviceport
-          Value: !Ref ServicePort
+        - Key: consulserviceconfig
+          Value: !Ref ServiceConfig
           PropagateAtLaunch: 'true'  
   ServiceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -67,6 +66,33 @@ Resources:
       - IpProtocol: -1
         CidrIp: 0.0.0.0/0
 
+  ServiceConfig:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Value:
+        Fn::Base64:
+          !Sub |
+            ${ConsulConfig}    
+      Description: !Sub '${Env} ${ServiceName} config'
+
+  ServiceConfigAccess:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyName: !Sub 'ConsulParamAccess-${ServiceName}'
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'ssm:GetParameters'
+              - 'ssm:GetParameter'
+              - 'ssm:GetParametersByPath'
+            Resource: !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${ServiceConfig}'
+      Roles:
+        - !Ref ASGToConsulRole
+
+
 Outputs:
-  ServiceSecurityGroup:
+  SecurityGroup:
     Value: !Ref ServiceSecurityGroup

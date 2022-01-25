@@ -14,5 +14,6 @@ parameters:
   InstanceType: t2.micro
   InstanceQty: '1'
   ServiceName: 'frontend'
-  ServicePort: '8080'
+  HealthCheckPath: '/_healthz'
+  Port: '8080'
   

@@ -21,11 +21,15 @@ Parameters:
     Default: 3
   TargetGroup:
     Type: String
+  PublicIP:
+    Type: String
+    Default: false
 
 Resources:
   ConsulConfig:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
+      AssociatePublicIpAddress: !Ref PublicIP
       ImageId: !Ref AMI
       IamInstanceProfile: !Ref Profile
       SecurityGroups:

@@ -55,6 +55,10 @@ buildshippingservice:  ## builds shippingservice
 	./scripts/dockerbuild.sh shippingservice
 
 .PHONY: buildall
-buildall:
-	make -j 5 buildasgtoconsul buildadservice
+buildall: buildadservice buildasgtoconsul buildcartservice buildcheckoutservice buildconsul 
+buildall: buildcurrencyservice buildemailservice buildfrontend buildpaymentservice buildproductcatalogservice
+buildall: buildrecommendationservice buildshippingservice
+
+cleanamis:
+	./scripts/deleteamis.sh
 

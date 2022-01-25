@@ -1,9 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'consul servers'
 Parameters:
-  SourceSecurityGroupId:
+  SourceSecurityGroup:
     Type: AWS::EC2::SecurityGroup::Id
-  DestinationSecurityGroupId:
+  DestinationSecurityGroup:
     Type: AWS::EC2::SecurityGroup::Id
   Port:
     Type: Number
@@ -11,8 +11,8 @@ Resources:
   ServiceIngress:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
-      GroupId: !Ref DestinationSecurityGroupId
+      GroupId: !Ref DestinationSecurityGroup
       IpProtocol: tcp
       FromPort: !Ref Port
       ToPort: !Ref Port
-      SourceSecurityGroupId: !Ref SourceSecurityGroupId
+      SourceSecurityGroupId: !Ref SourceSecurityGroup

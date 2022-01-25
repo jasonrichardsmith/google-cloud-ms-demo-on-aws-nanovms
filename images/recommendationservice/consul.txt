@@ -1,0 +1,14 @@
+{
+  "Name": "recommendationservice",
+  "EnableTagOverride": false,
+  "Check": {
+    "DeregisterCriticalServiceAfter": "2m",
+    "GRPC": "HEALTHROUTE:8080",
+    "Interval": "5s",
+    "Timeout": "5s"
+  },
+  "Weights": {
+    "Passing": 10,
+    "Warning": 1
+  }
+}

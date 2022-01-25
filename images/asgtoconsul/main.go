@@ -1,15 +1,18 @@
 package main
 
 import (
+	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
-	"strconv"
+	"strings"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
+	"github.com/aws/aws-sdk-go/service/ssm"
 	consul "github.com/hashicorp/consul/api"
 )
 
@@ -66,7 +69,7 @@ func getAServer(region string) (string, error) {
 			}
 		}
 	}
-	return "", errors.New("discover-aws: no instnaces with privateips found")
+	return "", errors.New("discover-aws: no instances with privateips found")
 
 }
 
@@ -96,28 +99,27 @@ func getServices(region string) ([]consul.AgentServiceRegistration, error) {
 		for _, inst := range r.Instances {
 			if inst.PrivateIpAddress == nil {
 				fmt.Printf("[DEBUG] discover-aws: Instance %s has no private ip", *inst.InstanceId)
-				continue
 			} else {
-				var servicename string
-				var serviceport int
+				var serviceconfig string
 				for _, tag := range inst.Tags {
-					if *tag.Key == "consulservicename" {
-						servicename = *tag.Value
-					}
-					if *tag.Key == "consulserviceport" {
-						serviceport, _ = strconv.Atoi(*tag.Value)
+					if *tag.Key == "consulserviceconfig" {
+						serviceconfig = *tag.Value
 					}
 				}
-				if servicename == "" {
-					fmt.Printf("[DEBUG] discover-aws: Instance %s has no servicename", *inst.InstanceId)
-					continue
+				if serviceconfig == "" {
+					fmt.Printf("[DEBUG] discover-aws: Instance %s has no serviceconfig", *inst.InstanceId)
 				} else {
-					service := consul.AgentServiceRegistration{
-						ID:      *inst.InstanceId,
-						Name:    servicename,
-						Port:    serviceport,
-						Address: *inst.PrivateIpAddress,
+					fmt.Sprintf("Retrieving Service Config %s", serviceconfig)
+					service, err := getConfiguration(serviceconfig, region)
+					if err != nil {
+						fmt.Errorf("Unable to get Parameter: %s", err)
 					}
+					service.ID = *inst.InstanceId
+					service.Address = *inst.PrivateIpAddress
+					if service.Check != nil {
+						service.Check.GRPC = strings.Replace(service.Check.GRPC, "HEALTHROUTE", *inst.PrivateIpAddress, -1)
+					}
+					fmt.Println(service)
 					services = append(services, service)
 				}
 
@@ -125,6 +127,28 @@ func getServices(region string) ([]consul.AgentServiceRegistration, error) {
 		}
 	}
 	return services, nil
+}
+
+func getConfiguration(name string, region string) (consul.AgentServiceRegistration, error) {
+	service := consul.AgentServiceRegistration{}
+	svc := ssm.New(session.New(), &aws.Config{
+		Region: &region,
+	})
+	resp, err := svc.GetParameter(&ssm.GetParameterInput{Name: &name})
+	if err != nil {
+		return service, err
+	}
+	var doc []byte
+	doc, err = base64.StdEncoding.DecodeString(*resp.Parameter.Value)
+
+	if err != nil {
+		return service, err
+	}
+	err = json.Unmarshal(doc, &service)
+	fmt.Println(err)
+	fmt.Println(service.Weights)
+	return service, err
+
 }
 
 func registerServices(serveraddress string, services []consul.AgentServiceRegistration) error {

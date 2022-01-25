@@ -1,0 +1,11 @@
+--- aws/aws_image.go.org	2022-01-25 12:12:42.418398567 +0100
++++ aws/aws_image.go	2022-01-25 12:13:00.734125407 +0100
+@@ -197,7 +197,7 @@
+ 
+ 		wg.Add(1)
+ 
+-		go p.writeToBlock(putSnapshotBlockInput, &wg, awsErrors)
++		p.writeToBlock(putSnapshotBlockInput, &wg, awsErrors)
+ 
+ 		blockIndex++
+ 	}

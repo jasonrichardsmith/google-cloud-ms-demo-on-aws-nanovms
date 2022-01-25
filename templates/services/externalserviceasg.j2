@@ -49,6 +49,8 @@ Resources:
       DesiredCapacity: !Ref InstanceQty
       MinSize: '0'
       MaxSize: !Ref InstanceQty
+      TargetGroupARNs:
+        - !Ref TargetGroup
       Tags:
         - Key: Name
           Value: !Sub '${Env}-${ServiceName}-Service'
@@ -62,7 +64,7 @@ Resources:
       - IpProtocol: -1
         CidrIp: 0.0.0.0/0
       SecurityGroupIngress:
-      - IpProtocol: !Ref Port
+      - IpProtocol: -1
         CidrIp: 0.0.0.0/0
   TargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -104,5 +106,5 @@ Resources:
           Value: !Sub '${ServiceName}-ALB'
 
 Outputs:
-  ServiceSecurityGroup:
+  SecurityGroup:
     Value: !Ref ServiceSecurityGroup

@@ -6,9 +6,9 @@ parameters:
     - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet1
     - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet2
     - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet3
-  AMI: !environment_variable CHECKOUTSERVICEAMI
+  AMI: !environment_variable CURRENCYSERVICEAMI
   InstanceType: t2.micro
   InstanceQty: '1'
-  ServiceName: 'checkoutservice'
-  ConsulConfig: !file images/checkoutservice/consul.txt
+  ServiceName: 'currencyservice'
+  ConsulConfig: !file images/currencyservice/consul.txt
   ASGToConsulRole: !stack_output {{ envname }}/consul/iam.yaml::Role

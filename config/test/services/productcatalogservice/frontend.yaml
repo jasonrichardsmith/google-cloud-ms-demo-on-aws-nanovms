@@ -1,0 +1,6 @@
+template_path: services/ingress.j2
+parameters:
+  DestinationSecurityGroup: !stack_output {{ envname }}/services/productcatalogservice/asg.yaml::SecurityGroup
+  SourceSecurityGroup: !stack_output {{ envname }}/services/frontend/asg.yaml::SecurityGroup
+  Port: '3550'
+  
