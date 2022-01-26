@@ -1,8 +1,0 @@
-template_path: consul/instancetester.j2
-parameters:
-  Env: {{ envname }}
-  Subnet: !stack_output {{ envname }}/network/vpc.yaml::PubSubnet2
-  SecurityGroup: !stack_output {{ envname }}/consul/consul.yaml::SecurityGroup
-  InstanceType: t2.micro
-  VPC: !stack_output {{ envname }}/network/vpc.yaml::VPC
-  InstanceProfile: !stack_output {{ envname }}/consul/iam.yaml::Profile
