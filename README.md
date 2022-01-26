@@ -26,7 +26,13 @@ make destroy
 ```
 The system also creates AMIs and Snapshots, so you may want to clean those up.
 
-The output from deploy will print a url for Consul (see below), and a URL for the Boutique shop.
+You delete all AMIs with the tag "CreatedBy=Ops"
+
+```bash
+make cleanamis
+```
+
+The output from deploy will print a url for Consul, and a URL for the Boutique shop.
 
 ## Description
 
