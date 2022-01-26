@@ -2,6 +2,7 @@ FROM bitnami/git:latest as git
 WORKDIR working
 COPY . .
 RUN git clone https://github.com/GoogleCloudPlatform/microservices-demo.git
+RUN cd microservices-demo && git checkout 0d5c2f3bd2143abc68c9300841b7affae34d7a12
 
 
 FROM golang:1.17.5-alpine as build

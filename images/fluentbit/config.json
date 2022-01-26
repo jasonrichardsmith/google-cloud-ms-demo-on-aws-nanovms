@@ -1,0 +1,27 @@
+{
+	"Args":[
+		"-e",
+		"/fluent-bit/firehose.so",
+		"-e",
+		"/fluent-bit/cloudwatch.so",
+		"-e",
+		"/fluent-bit/kinesis.so",
+		"-c",
+		"/fluent-bit.conf"
+	],
+	"Files":[
+	  "fluent-bit.conf"
+	],
+  	"Dirs": [
+    		"etc"
+  	],
+	"RunConfig": {
+		"Ports":[
+			"5170"
+		]
+	},
+    	"CloudConfig" :{
+        	"Zone": "eu-west-1",
+		"Platform": "aws"
+    	}
+}

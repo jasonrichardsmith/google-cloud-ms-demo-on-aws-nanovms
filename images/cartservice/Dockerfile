@@ -12,6 +12,7 @@ RUN apt-get install -y dotnet-sdk-6.0
 RUN rm packages-microsoft-prod.deb
 RUN git clone https://github.com/GoogleCloudPlatform/microservices-demo.git
 RUN cd microservices-demo/src/cartservice/src/ && \
+	git checkout 0d5c2f3bd2143abc68c9300841b7affae34d7a12 && \
 	xmlstarlet edit -L --append "//Project/PropertyGroup/TargetFramework" \
 		--type elem --name "InvariantGlobalization" --value "true" cartservice.csproj && \
 	dotnet restore cartservice.csproj -r linux-x64 && \

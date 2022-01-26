@@ -108,3 +108,5 @@ Resources:
 Outputs:
   SecurityGroup:
     Value: !Ref ServiceSecurityGroup
+  ServiceDNS:
+    Value: !GetAtt ALB.DNSName

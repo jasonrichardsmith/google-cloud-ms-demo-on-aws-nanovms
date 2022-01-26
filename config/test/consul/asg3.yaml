@@ -11,4 +11,6 @@ parameters:
   AMI: !environment_variable CONSUL3AMI
   InstanceType: t2.micro
   InstanceQty: '1'
-  TargetGroup: !stack_output {{ envname }}/consul/nlb.yaml::DNSTargetGroup
+  TargetGroups:
+    - !stack_output {{ envname }}/consul/alb.yaml::TargetGroup
+    - !stack_output {{ envname }}/consul/nlb.yaml::DNSTargetGroup

@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Logger for services'
+Parameters:
+  Env:
+    Type: String
+  VPC:
+    Type: AWS::EC2::VPC::Id
+  SubnetIds:
+    Type: List<AWS::EC2::Subnet::Id>
+Resources:
+
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: !Sub 'Consul ui ingress'
+      VpcId: !Ref VPC
+      SecurityGroupEgress:
+      - IpProtocol: -1
+        CidrIp: 0.0.0.0/0
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        CidrIp: 0.0.0.0/0
+        FromPort: 8500 
+        ToPort: 8500 
+
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: '30'
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: '5'
+      HealthyThresholdCount: '3'
+      HealthCheckPath: "/"
+      HealthCheckPort: 8500
+      Port: 8500
+      Protocol: HTTP
+      VpcId: !Ref VPC
+      Matcher:
+        HttpCode: '301'
+      TargetGroupAttributes:
+        - Key: stickiness.enabled
+          Value: 'true'
+        - Key: stickiness.type
+          Value: lb_cookie
+
+  Listener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroup
+      LoadBalancerArn: !Ref ALB
+      Port: 8500
+      Protocol: HTTP
+
+  ALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Scheme: internet-facing
+      Subnets: !Ref SubnetIds
+      SecurityGroups:
+      - !Ref SecurityGroup
+      Tags:
+        - Key: Name
+          Value: !Sub 'Consul-ALB'
+Outputs:
+  TargetGroup:
+    Value: !Ref TargetGroup
+  ConsulDNS:
+    Value: !GetAtt ALB.DNSName

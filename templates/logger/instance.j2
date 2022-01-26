@@ -1,0 +1,78 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Logger for services'
+Parameters:
+  Env:
+    Type: String
+  VPC:
+    Type: AWS::EC2::VPC::Id
+  VPCCIDR:
+    Type: String
+  SubnetId:
+    Type: AWS::EC2::Subnet::Id
+  AMI:
+    Type: 'AWS::EC2::Image::Id'
+  InstanceType:
+    Type: String
+    Default: t3a.nano
+
+Resources:
+  LoggerInstance: 
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceType
+      ImageId: !Ref AMI
+      IamInstanceProfile: !Ref LoggerProfile
+      SecurityGroupIds:
+        - !Ref LoggerSecurityGroup
+      PrivateIpAddress: 192.168.1.100
+      SubnetId: !Ref SubnetId
+      BlockDeviceMappings:
+      - DeviceName: "/dev/sda1"
+        Ebs: 
+          VolumeType: "gp2"
+          DeleteOnTermination: "true"
+          VolumeSize: "8"
+      Tags:
+        - Key: Name
+          Value: !Sub '${Env}-logger'
+
+
+  LoggerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: logger ingress
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 5170
+        ToPort: 5170
+        CidrIp: !Ref VPCCIDR
+      SecurityGroupEgress:
+      - IpProtocol: -1
+        CidrIp: 0.0.0.0/0
+  LoggerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: Logging
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'logs:*'
+                Resource: '*'
+  LoggerProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+        - !Ref LoggerRole

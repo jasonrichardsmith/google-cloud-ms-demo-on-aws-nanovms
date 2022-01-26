@@ -19,8 +19,8 @@ Parameters:
   InstanceQty:
     Type: Number
     Default: 3
-  TargetGroup:
-    Type: String
+  TargetGroups:
+    Type: List<String>
   PublicIP:
     Type: String
     Default: false
@@ -52,8 +52,7 @@ Resources:
       DesiredCapacity: !Ref InstanceQty
       MinSize: '0'
       MaxSize: !Ref InstanceQty
-      TargetGroupARNs:
-        - !Ref TargetGroup
+      TargetGroupARNs: !Ref TargetGroups
       Tags:
         - Key: Name
           Value: !Sub '${Env}-Consul'

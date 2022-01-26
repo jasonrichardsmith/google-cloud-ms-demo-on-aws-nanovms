@@ -1,5 +1,5 @@
 {
-  "Name": "checkoutservice",
+  "Name": "paymentservice",
   "EnableTagOverride": false,
   "Check": {
     "DeregisterCriticalServiceAfter": "2m",

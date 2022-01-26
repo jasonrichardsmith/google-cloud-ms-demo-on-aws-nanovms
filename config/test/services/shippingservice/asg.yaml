@@ -1,0 +1,14 @@
+template_path: services/internalserviceasg.j2
+parameters:
+  Env: {{ envname }}
+  VPC: !stack_output {{ envname }}/network/vpc.yaml::VPC
+  SubnetIds:
+    - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet1
+    - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet2
+    - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet3
+  AMI: !environment_variable SHIPPINGSERVICEAMI
+  InstanceType: t2.micro
+  InstanceQty: '1'
+  ServiceName: 'shippingservice'
+  ConsulConfig: !file images/shippingservice/consul.txt
+  ASGToConsulRole: !stack_output {{ envname }}/consul/iam.yaml::Role

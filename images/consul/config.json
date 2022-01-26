@@ -21,8 +21,10 @@
     ],
     "ShowDebug": true
   },
-  "CloudConfig": {
+ 
+ "CloudConfig": {
     "Zone": "eu-west-1",
     "Platform": "aws"
   }
+
 }

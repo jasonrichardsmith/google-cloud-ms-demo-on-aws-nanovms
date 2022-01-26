@@ -34,6 +34,10 @@ buildcurrencyservice:  ## builds currencyservice
 buildemailservice:  ## builds emailservice
 	./scripts/dockerbuild.sh emailservice
 
+.PHONY: buildfluentbit
+buildfluentbit:  ## builds fluentbit
+	./scripts/dockerbuild.sh fluentbit
+
 .PHONY: buildfrontend
 buildfrontend:  ## builds frontend
 	./scripts/dockerbuild.sh frontend
@@ -57,8 +61,19 @@ buildshippingservice:  ## builds shippingservice
 .PHONY: buildall
 buildall: buildadservice buildasgtoconsul buildcartservice buildcheckoutservice buildconsul 
 buildall: buildcurrencyservice buildemailservice buildfrontend buildpaymentservice buildproductcatalogservice
-buildall: buildrecommendationservice buildshippingservice
+buildall: buildrecommendationservice buildshippingservice buildfluentbit
 
+.PHONY: cleanamis
 cleanamis:
 	./scripts/deleteamis.sh
+
+.PHONY: deploy
+deploy:
+	./scripts/deploy.sh
+	./scripts/deployoutput.sh
+
+.PHONY: destroy
+destroy:
+	./scripts/destroy.sh
+
 

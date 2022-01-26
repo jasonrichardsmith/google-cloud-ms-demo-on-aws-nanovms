@@ -1,0 +1,8 @@
+template_path: consul/alb.j2
+parameters:
+  Env: {{ envname }}
+  VPC: !stack_output {{ envname }}/network/vpc.yaml::VPC
+  SubnetIds:
+    - !stack_output {{ envname }}/network/vpc.yaml::PubSubnet1
+    - !stack_output {{ envname }}/network/vpc.yaml::PubSubnet2
+    - !stack_output {{ envname }}/network/vpc.yaml::PubSubnet3

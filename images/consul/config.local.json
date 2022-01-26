@@ -1,0 +1,25 @@
+{
+  "Files": [
+    "consul.config"
+  ],
+  "Dirs": [
+    "etc"
+  ],
+  "Args": [
+    "agent",
+    "-config-file=/consul.config",
+    "-config-format=json"
+  ],
+  "RunConfig": {
+    "ShowDebug": true
+  },
+  "ManifestPassthrough": {
+    "consoles": ["+net"]
+  },
+ 
+ "CloudConfig": {
+    "Zone": "eu-west-1",
+    "Platform": "aws"
+  }
+
+}
