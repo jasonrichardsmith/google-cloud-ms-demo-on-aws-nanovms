@@ -7,6 +7,10 @@ simpler safer and more secure deployments in the Cloud.
 
 To deploy you need to create an S3 bucket in your target account, and export the bucket name.
 
+```bash
+export BUCKET=mybucketname
+```
+
 Export your AWS credentials to
 [AWS Environment variables](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html).
 
