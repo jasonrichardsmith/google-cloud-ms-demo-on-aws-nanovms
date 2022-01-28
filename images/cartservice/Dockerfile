@@ -1,3 +1,19 @@
+FROM bitnami/git:latest as git
+WORKDIR /working
+RUN git clone https://github.com/nanovms/ops.git
+
+FROM golang:1.17.5-alpine as opspatched
+WORKDIR /working/ops
+COPY --from=git /working /working
+RUN apk add --no-cache ca-certificates patch
+RUN apk add build-base
+COPY concurrent.patch .
+WORKDIR /working/ops
+RUN patch aws/aws_image.go concurrent.patch
+RUN go mod download && \
+	go build -ldflags "-linkmode external -extldflags -static" -a .
+
+
 FROM ubuntu:20.04 as build
 WORKDIR /working
 COPY . .
@@ -18,7 +34,7 @@ RUN cd microservices-demo/src/cartservice/src/ && \
 	dotnet restore cartservice.csproj -r linux-x64 && \
 	dotnet publish -c release --self-contained --runtime linux-x64 \
 		-o /publish -p:PublishSingleFile=true
-RUN curl https://ops.city/get.sh -sSfL | sh
-RUN ln -sf ~/.ops/bin/ops /usr/bin/ops
+
+COPY --from=opspatched /working/ops/ops /usr/bin/opssafe
 WORKDIR /working
 ENTRYPOINT ./scripts/cartservice.sh

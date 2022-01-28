@@ -2,7 +2,7 @@ FROM bitnami/git:latest as git
 WORKDIR /working
 COPY . .
 RUN git clone https://github.com/GoogleCloudPlatform/microservices-demo.git
-RUN cd microservices-demo && git checkout 0d5c2f3bd2143abc68c9300841b7affae34d7a12
+RUN cd microservices-demo && git checkout af0515f7c94044cec0ff7faab5e7c32bf09ab7bf
 
 
 FROM python:3.8-slim as build
