@@ -10,9 +10,9 @@ help:
 buildadservice:  ## builds adservice
 	./scripts/dockerbuild.sh adservice
 
-.PHONY: buildasgtoconsul
-buildasgtoconsul:  ## builds adservice
-	./scripts/dockerbuild.sh asgtoconsul
+.PHONY: buildawsconsul
+buildawsconsul:  ## builds adservice
+	./scripts/dockerbuild.sh awsconsul
 
 .PHONY: buildcartservice
 buildcartservice:  ## builds cartservice
@@ -59,7 +59,7 @@ buildshippingservice:  ## builds shippingservice
 	./scripts/dockerbuild.sh shippingservice
 
 .PHONY: buildall
-buildall: buildadservice buildasgtoconsul buildcartservice buildcheckoutservice buildconsul 
+buildall: buildadservice buildawsconsul buildcartservice buildcheckoutservice buildconsul 
 buildall: buildcurrencyservice buildemailservice buildfrontend buildpaymentservice buildproductcatalogservice
 buildall: buildrecommendationservice buildshippingservice buildfluentbit
 

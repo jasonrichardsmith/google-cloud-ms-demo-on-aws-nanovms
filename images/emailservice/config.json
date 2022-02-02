@@ -15,7 +15,9 @@
     "RunConfig": {
 	    "Ports":[
 		    "5055"
-	    ]
+	    ],
+
+    	"Klibs": ["syslog"]
     },
     "MapDirs": {
         "./.venv/*": "/.local",
@@ -25,6 +27,11 @@
 	"templates",
 	"etc"
     ],
+  "ManifestPassthrough": {
+    "syslog": {
+      "server": "fluentbit.service.consul"
+    }
+  },
     "CloudConfig": {
 	    "Zone": "eu-west-1",
 	    "Platform": "aws"

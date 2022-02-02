@@ -6,7 +6,9 @@
 	"RunConfig": {
 		"Ports":[
 			"7070"
-		]
+		],
+
+    "Klibs": ["syslog"]
 	},
         "Dirs":[
 	  "etc"
@@ -29,6 +31,11 @@
 		"/lib/x86_64-linux-gnu/libgcc_s.so.1",
 		"/lib/x86_64-linux-gnu/libtinfo.so.6"
 	],
+  "ManifestPassthrough": {
+    "syslog": {
+      "server": "fluentbit.service.consul"
+    }
+  },
 	
     	"CloudConfig" :{
         	"Zone": "eu-west-1",

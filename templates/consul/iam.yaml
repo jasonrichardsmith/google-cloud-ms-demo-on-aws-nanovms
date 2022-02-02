@@ -24,6 +24,16 @@ Resources:
                 Action:
                   - ec2:DescribeInstances
                 Resource: '*'
+        - PolicyName: aliasaccess
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'ssm:GetParameters'
+                  - 'ssm:GetParameter'
+                  - 'ssm:GetParametersByPath'
+                Resource: !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/consulserveraliases/*'
   ConsulProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:

@@ -1,4 +1,4 @@
-template_path: services/externalserviceasg.j2
+template_path: services/externalserviceasg.yaml
 parameters:
   Env: {{ envname }}
   VPC: !stack_output {{ envname }}/network/vpc.yaml::VPC

@@ -7,17 +7,21 @@
 		"-e",
 		"/fluent-bit/kinesis.so",
 		"-c",
-		"/fluent-bit.conf"
+		"/fluent-bit.conf",
+		"-R",
+		"/parsers.conf"
 	],
 	"Files":[
-	  "fluent-bit.conf"
+	  "fluent-bit.conf",
+	  "parsers.conf"
 	],
   	"Dirs": [
     		"etc"
   	],
 	"RunConfig": {
 		"Ports":[
-			"5170"
+			"514",
+			"2020"
 		]
 	},
     	"CloudConfig" :{

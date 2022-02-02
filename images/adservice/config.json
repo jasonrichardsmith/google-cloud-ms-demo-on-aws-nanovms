@@ -11,7 +11,8 @@
 	"RunConfig": {
 		"Ports": [
 			"9555"
-		]
+		],
+    		"Klibs": ["syslog"]
 	},
 	"Args":[
 		"-Dos.name=Linux",
@@ -23,6 +24,11 @@
 		"hipstershop.AdService"
 	],
 
+  "ManifestPassthrough": {
+    "syslog": {
+      "server": "fluentbit.service.consul"
+    }
+  },
     	"CloudConfig" :{
         	"Zone": "eu-west-1",
 		"Platform": "aws"

@@ -1,0 +1,55 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Logger for services'
+Parameters:
+  Env:
+    Type: String
+  ServiceName:
+    Type: String
+
+Resources:
+
+  ServiceConfig1:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Name: "/consulserveraliases/fluentbit1"
+      Value:
+        Fn::Base64:
+          !Sub |
+             {
+                "Name": "${ServiceName}",
+                "EnableTagOverride": false,
+                "Id": "${ServiceName}1",
+                "Address": "192.168.1.10"
+             }
+      Description: !Sub '${Env} ${ServiceName}1 config'
+  ServiceConfig2:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Name: "/consulserveraliases/fluentbit2"
+      Value:
+        Fn::Base64:
+          !Sub |
+             {
+                "Name": "${ServiceName}",
+                "EnableTagOverride": false,
+                "Id": "${ServiceName}2",
+                "Address": "192.168.2.10"
+             }
+      Description: !Sub '${Env} ${ServiceName}2 config'
+  ServiceConfig3:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Name: "/consulserveraliases/fluentbit3"
+      Value:
+        Fn::Base64:
+          !Sub |
+             {
+                "Name": "${ServiceName}",
+                "EnableTagOverride": false,
+                "Id": "${ServiceName}3",
+                "Address": "192.168.3.10"
+             }
+      Description: !Sub '${Env} ${ServiceName}3 config'

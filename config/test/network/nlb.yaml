@@ -1,0 +1,7 @@
+template_path: network/nlb.yaml
+parameters:
+  Env: {{ envname }}
+  SubnetIds:
+    - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet1
+    - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet2
+    - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet3

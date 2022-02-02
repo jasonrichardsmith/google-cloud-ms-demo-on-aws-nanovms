@@ -5,8 +5,8 @@ Parameters:
     Type: String
   VPC:
     Type: AWS::EC2::VPC::Id
-  SubnetIds:
-    Type: List<AWS::EC2::Subnet::Id>
+  NLB:
+    Type: String
 
 
 Resources:
@@ -32,22 +32,6 @@ Resources:
       Port: 53
       Protocol: TCP_UDP
 
-  NLB:
-    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-    Properties:
-      IpAddressType: ipv4
-      Scheme: internal
-      SubnetMappings:
-      - SubnetId: !Select [0, !Ref SubnetIds]
-        PrivateIPv4Address: 192.168.1.10
-      - SubnetId: !Select [1, !Ref SubnetIds]
-        PrivateIPv4Address: 192.168.2.10
-      - SubnetId: !Select [2, !Ref SubnetIds]
-        PrivateIPv4Address: 192.168.3.10
-      Type: network
-      Tags:
-        - Key: Name
-          Value: !Sub '${Env}-Consul-NLB'
 Outputs:
   DNSTargetGroup:
     Value: !Ref DNSTargetGroup

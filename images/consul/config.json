@@ -19,9 +19,15 @@
       "8400",
       "8500"
     ],
+    "Klibs": ["syslog"],
     "ShowDebug": true
   },
  
+  "ManifestPassthrough": {
+    "syslog": {
+      "server": "fluentbit.service.consul"
+    }
+  },
  "CloudConfig": {
     "Zone": "eu-west-1",
     "Platform": "aws"

@@ -19,8 +19,14 @@
 	"RunConfig": {
 		"Ports": [
 			"50051"
-		]
+		],
+    		"Klibs": ["syslog"]
 	},
+  "ManifestPassthrough": {
+    "syslog": {
+      "server": "fluentbit.service.consul"
+    }
+  },
     	"CloudConfig" :{
         	"Zone": "eu-west-1",
 		"Platform": "aws"

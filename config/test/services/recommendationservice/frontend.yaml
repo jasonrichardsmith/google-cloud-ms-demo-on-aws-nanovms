@@ -1,4 +1,4 @@
-template_path: services/ingress.j2
+template_path: services/ingress.yaml
 parameters:
   DestinationSecurityGroup: !stack_output {{ envname }}/services/recommendationservice/asg.yaml::SecurityGroup
   SourceSecurityGroup: !stack_output {{ envname }}/services/frontend/asg.yaml::SecurityGroup

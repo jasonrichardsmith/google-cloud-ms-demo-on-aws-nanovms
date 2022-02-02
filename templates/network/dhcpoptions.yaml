@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'VPC DHCP Options'
+Parameters:
+  Env:
+    Type: String
+  VPC:
+    Type: AWS::EC2::VPC::Id
+
+Resources:
+###
+# DHCP
+###
+  DHCPOptions: 
+    Type: AWS::EC2::DHCPOptions
+    Properties: 
+      DomainNameServers: 
+#        - AmazonProvidedDNS
+        - 192.168.1.10
+        - 192.168.2.10
+        - 192.168.3.10
+      Tags:
+        - Key: Name
+          Value: !Sub '${Env}-DHCPOptions'
+  VPCDHCPOptionsAssociation:
+    Type: AWS::EC2::VPCDHCPOptionsAssociation
+    Properties:
+      VpcId: !Ref VPC
+      DhcpOptionsId: !Ref DHCPOptions
+

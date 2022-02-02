@@ -1,4 +1,4 @@
-template_path: consul/asg.j2
+template_path: consul/asg.yaml
 parameters:
   Env: {{ envname }}
   VPC: !stack_output {{ envname }}/network/vpc.yaml::VPC
@@ -8,9 +8,9 @@ parameters:
     - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet3
   SecurityGroupId: !stack_output {{ envname }}/consul/consul.yaml::SecurityGroup
   Profile: !stack_output {{ envname }}/consul/iam.yaml::Profile
-  AMI: !environment_variable CONSUL3AMI
+  AMI: !environment_variable CONSULAMI
   InstanceType: t2.micro
-  InstanceQty: '1'
+  InstanceQty: '3'
   TargetGroups:
     - !stack_output {{ envname }}/consul/alb.yaml::TargetGroup
     - !stack_output {{ envname }}/consul/nlb.yaml::DNSTargetGroup

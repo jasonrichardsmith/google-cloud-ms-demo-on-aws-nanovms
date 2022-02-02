@@ -94,9 +94,9 @@ Resources:
       VpcEndpointType: Interface
       PrivateDnsEnabled: true
       SubnetIds:
-        - !Ref PrivSubnet1
-        - !Ref PrivSubnet2
-        - !Ref PrivSubnet3
+        - !Ref PubSubnet1
+        - !Ref PubSubnet2
+        - !Ref PubSubnet3
       SecurityGroupIds:
         - !Ref VPCESecurityGroup
   VPCESecurityGroup:

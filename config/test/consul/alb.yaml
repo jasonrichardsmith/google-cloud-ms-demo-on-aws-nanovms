@@ -1,4 +1,4 @@
-template_path: consul/alb.j2
+template_path: consul/alb.yaml
 parameters:
   Env: {{ envname }}
   VPC: !stack_output {{ envname }}/network/vpc.yaml::VPC

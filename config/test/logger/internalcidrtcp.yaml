@@ -1,0 +1,5 @@
+template_path: services/cidringress.yaml
+parameters:
+  DestinationSecurityGroup: !stack_output {{ envname }}/logger/asg.yaml::SecurityGroup
+  SourceCIDR: !stack_output {{ envname }}/network/vpc.yaml::VPCCIDR
+  Port: '514'

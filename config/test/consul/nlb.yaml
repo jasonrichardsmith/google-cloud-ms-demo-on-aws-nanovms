@@ -1,8 +1,5 @@
-template_path: consul/nlb.j2
+template_path: consul/nlb.yaml
 parameters:
   Env: {{ envname }}
   VPC: !stack_output {{ envname }}/network/vpc.yaml::VPC
-  SubnetIds:
-    - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet1
-    - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet2
-    - !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet3
+  NLB: !stack_output {{ envname }}/network/nlb.yaml::NLB

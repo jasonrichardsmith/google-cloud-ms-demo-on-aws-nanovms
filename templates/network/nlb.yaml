@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'NLB'
+Parameters:
+  Env:
+    Type: String
+  SubnetIds:
+    Type: List<AWS::EC2::Subnet::Id>
+
+
+Resources:
+
+  NLB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      IpAddressType: ipv4
+      Scheme: internal
+      SubnetMappings:
+      - SubnetId: !Select [0, !Ref SubnetIds]
+        PrivateIPv4Address: 192.168.1.10
+      - SubnetId: !Select [1, !Ref SubnetIds]
+        PrivateIPv4Address: 192.168.2.10
+      - SubnetId: !Select [2, !Ref SubnetIds]
+        PrivateIPv4Address: 192.168.3.10
+      Type: network
+      LoadBalancerAttributes:
+      - Key: load_balancing.cross_zone.enabled
+        Value: false
+      Tags:
+        - Key: Name
+          Value: !Sub '${Env}-NLB'
+Outputs:
+  NLB:
+    Value: !Ref NLB
+  NLBDNS:
+    Value: !GetAtt NLB.DNSName

@@ -5,4 +5,4 @@ cp -rf images/recommendationservice/etc microservices-demo/src/recommendationser
 cp -rf images/recommendationservice/usr microservices-demo/src/recommendationservice/
 cd microservices-demo/src/recommendationservice
 rm -rf ./.venv/bin
-opssafe image create --package python_3.8.6 -i recommendationservice -c config.json --show-debug -t aws --nanos-version eeb8acc
+opssafe image create --package python_3.8.6 -i recommendationservice -c config.json --show-debug -t aws -n

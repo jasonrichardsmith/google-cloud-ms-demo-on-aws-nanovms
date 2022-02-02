@@ -1,18 +1,21 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'consul servers'
+Description: 'cidr ingress'
 Parameters:
-  SourceSecurityGroup:
-    Type: AWS::EC2::SecurityGroup::Id
   DestinationSecurityGroup:
     Type: AWS::EC2::SecurityGroup::Id
+  SourceCIDR:
+    Type: String
   Port:
     Type: Number
+  Protocol:
+    Type: String
+    Default: tcp
 Resources:
   ServiceIngress:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref DestinationSecurityGroup
-      IpProtocol: tcp
+      IpProtocol: !Ref Protocol
       FromPort: !Ref Port
       ToPort: !Ref Port
-      SourceSecurityGroupId: !Ref SourceSecurityGroup
+      CidrIp: !Ref SourceCIDR

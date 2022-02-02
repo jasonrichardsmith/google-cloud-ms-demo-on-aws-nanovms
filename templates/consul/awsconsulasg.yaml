@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'Consul instances'
+Description: 'awsconsul servers'
 Parameters:
   Env:
     Type: String
@@ -18,18 +18,12 @@ Parameters:
     Default: t3a.nano
   InstanceQty:
     Type: Number
-    Default: 3
-  TargetGroups:
-    Type: List<String>
-  PublicIP:
-    Type: String
-    Default: false
+    Default: 1
 
 Resources:
   ConsulConfig:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
-      AssociatePublicIpAddress: !Ref PublicIP
       ImageId: !Ref AMI
       IamInstanceProfile: !Ref Profile
       SecurityGroups:
@@ -38,7 +32,7 @@ Resources:
       BlockDeviceMappings:
         - DeviceName: "/dev/sda1"
           Ebs:
-            VolumeSize: 8
+            VolumeSize: 1
             VolumeType: gp3
             DeleteOnTermination: "true"
 
@@ -52,14 +46,7 @@ Resources:
       DesiredCapacity: !Ref InstanceQty
       MinSize: '0'
       MaxSize: !Ref InstanceQty
-      TargetGroupARNs: !Ref TargetGroups
       Tags:
         - Key: Name
-          Value: !Sub '${Env}-Consul'
+          Value: !Sub '${Env}-AWSConsul'
           PropagateAtLaunch: 'true'
-        - Key: consulcloud
-          Value: consulserver
-          PropagateAtLaunch: 'true'  
-Outputs:
-  ConsulASG:
-    Value: !Ref ASConsul

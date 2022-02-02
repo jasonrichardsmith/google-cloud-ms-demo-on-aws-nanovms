@@ -1,0 +1,92 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Logger for services'
+Parameters:
+  Env:
+    Type: String
+  VPC:
+    Type: AWS::EC2::VPC::Id
+  SubnetIds:
+    Type: List<AWS::EC2::Subnet::Id>
+  AMI:
+    Type: 'AWS::EC2::Image::Id'
+  InstanceType:
+    Type: String
+    Default: t3a.nano
+  InstanceQty:
+    Type: Number
+    Default: 3
+  ServiceName:
+    Type: String
+  TargetGroups:
+    Type: List<String>
+
+Resources:
+  ServiceLaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      ImageId: !Ref AMI
+      SecurityGroups:
+        - !Ref ServiceSecurityGroup
+      InstanceType: !Ref InstanceType
+      IamInstanceProfile: !Ref Profile
+      BlockDeviceMappings:
+        - DeviceName: "/dev/sda1"
+          Ebs:
+            VolumeSize: 2
+            VolumeType: gp3
+            DeleteOnTermination: "true"
+
+  ASService:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      VPCZoneIdentifier: !Ref SubnetIds
+      LaunchConfigurationName: !Ref ServiceLaunchConfig
+      TargetGroupARNs: !Ref TargetGroups
+      TerminationPolicies:
+        - OldestInstance
+      DesiredCapacity: !Ref InstanceQty
+      MinSize: '0'
+      MaxSize: !Ref InstanceQty
+      Tags:
+        - Key: Name
+          Value: !Sub '${Env}-${ServiceName}-Service'
+          PropagateAtLaunch: 'true'
+  ServiceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: !Sub '${ServiceName} ingress'
+      VpcId: !Ref VPC
+      SecurityGroupEgress:
+      - IpProtocol: -1
+        CidrIp: 0.0.0.0/0
+
+  Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: Logging
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'logs:*'
+                Resource: '*'
+  Profile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+        - !Ref Role
+
+Outputs:
+  SecurityGroup:
+    Value: !Ref ServiceSecurityGroup

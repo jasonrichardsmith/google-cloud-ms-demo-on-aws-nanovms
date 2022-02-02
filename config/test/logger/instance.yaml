@@ -1,8 +1,0 @@
-template_path: logger/instance.j2
-parameters:
-  Env: {{ envname }}
-  VPC: !stack_output {{ envname }}/network/vpc.yaml::VPC
-  SubnetId: !stack_output {{ envname }}/network/vpc.yaml::PrivSubnet1
-  AMI: !environment_variable FLUENTBITAMI
-  InstanceType: t2.micro
-  VPCCIDR: !stack_output {{ envname }}/network/vpc.yaml::VPCCIDR
