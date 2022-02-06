@@ -1,0 +1,17 @@
+[
+	{
+		"Name": "fluentbitinstances",
+		"EnableTagOverride": false,
+		"Check": {
+			"DeregisterCriticalServiceAfter": "2m",
+			"HTTP": "http://HEALTHROUTE:2020",
+			"Interval": "5s",
+			"Timeout": "5s"
+		},
+		"Port": 2020,
+		"Weights": {
+			"Passing": 10,
+			"Warning": 1
+		}
+	}
+]

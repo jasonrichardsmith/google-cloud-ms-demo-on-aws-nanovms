@@ -1,0 +1,6 @@
+template_path: services/serviceconfig.yaml
+parameters:
+  Env: {{ envname }}
+  ServiceName: 'shippingservice'
+  ConsulConfig: !file_contents images/shippingservice/consul.json
+  ASGToConsulRole: !stack_output {{ envname }}/consul/iam.yaml::Role

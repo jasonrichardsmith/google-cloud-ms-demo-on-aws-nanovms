@@ -1,37 +1,25 @@
 {
-	"Env":{
+	"Env": {
 		"PORT": "50051",
 		"DISABLE_DEBUGGER": "1",
-        	"DISABLE_TRACING": "1",
-        	"DISABLE_PROFILER": "1",
+		"DISABLE_TRACING": "1",
+		"DISABLE_PROFILER": "1",
 		"DISABLE_STATs": "1"
 	},
-	"Args":[
-		"index.js"
-	],
-	"Files":[
-		"server.js",
-		"index.js",
-		"charge.js"
-	],
-	"Dirs":[
-		"node_modules",
-		"proto",
-		"etc"
-	],
+	"Args": ["index.js"],
+	"Files": ["server.js", "index.js", "charge.js"],
+	"Dirs": ["node_modules", "proto", "etc"],
 	"RunConfig": {
-		"Ports":[
-			"50051"
-		],
-    		"Klibs": ["syslog"]
+		"Ports": ["50051"],
+		"Klibs": ["syslog"]
 	},
-  "ManifestPassthrough": {
-    "syslog": {
-      "server": "fluentbit.service.consul"
-    }
-  },
-    	"CloudConfig" :{
-        	"Zone": "eu-west-1",
+	"ManifestPassthrough": {
+		"syslog": {
+			"server": "fluentbit.service.consul"
+		}
+	},
+	"CloudConfig": {
+		"Zone": "eu-west-1",
 		"Platform": "aws"
-    	}
+	}
 }

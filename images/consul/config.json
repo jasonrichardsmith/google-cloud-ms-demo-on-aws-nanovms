@@ -1,36 +1,20 @@
 {
-  "Files": [
-    "consul.config"
-  ],
-  "Dirs": [
-    "etc"
-  ],
-  "Args": [
-    "agent",
-    "-config-file=/consul.config",
-    "-config-format=json"
-  ],
-  "RunConfig": {
-    "Ports": [
-      "53",
-      "8300",
-      "8301",
-      "8302",
-      "8400",
-      "8500"
-    ],
-    "Klibs": ["syslog"],
-    "ShowDebug": true
-  },
- 
-  "ManifestPassthrough": {
-    "syslog": {
-      "server": "fluentbit.service.consul"
-    }
-  },
- "CloudConfig": {
-    "Zone": "eu-west-1",
-    "Platform": "aws"
-  }
+	"Files": ["consul.config"],
+	"Dirs": ["etc"],
+	"Args": ["agent", "-config-file=/consul.config", "-config-format=json"],
+	"RunConfig": {
+		"Ports": ["53", "8300", "8301", "8302", "8400", "8500"],
+		"Klibs": ["syslog"],
+		"ShowDebug": true
+	},
 
+	"ManifestPassthrough": {
+		"syslog": {
+			"server": "fluentbit.service.consul"
+		}
+	},
+	"CloudConfig": {
+		"Zone": "eu-west-1",
+		"Platform": "aws"
+	}
 }

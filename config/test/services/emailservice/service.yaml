@@ -1,0 +1,6 @@
+template_path: services/serviceconfig.yaml
+parameters:
+  Env: {{ envname }}
+  ServiceName: 'emailservice'
+  ConsulConfig: !file_contents images/emailservice/consul.json
+  ASGToConsulRole: !stack_output {{ envname }}/consul/iam.yaml::Role

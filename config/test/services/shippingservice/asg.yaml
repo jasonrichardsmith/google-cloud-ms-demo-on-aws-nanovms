@@ -1,4 +1,6 @@
 template_path: services/internalserviceasg.yaml
+dependencies:
+  - {{ envname }}/logger/asg.yaml
 parameters:
   Env: {{ envname }}
   VPC: !stack_output {{ envname }}/network/vpc.yaml::VPC
@@ -10,5 +12,4 @@ parameters:
   InstanceType: t2.micro
   InstanceQty: '1'
   ServiceName: 'shippingservice'
-  ConsulConfig: !file images/shippingservice/consul.txt
-  ASGToConsulRole: !stack_output {{ envname }}/consul/iam.yaml::Role
+  ServiceConfig: !stack_output {{ envname }}/services/shippingservice/service.yaml::ServiceConfig

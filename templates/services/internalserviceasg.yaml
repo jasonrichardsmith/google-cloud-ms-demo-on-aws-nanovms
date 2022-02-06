@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'Logger for services'
+Description: 'Service ASG'
 Parameters:
   Env:
     Type: String
@@ -17,9 +17,7 @@ Parameters:
     Default: 3
   ServiceName:
     Type: String
-  ConsulConfig:
-    Type: String
-  ASGToConsulRole:
+  ServiceConfig:
     Type: String
 
 Resources:
@@ -66,31 +64,6 @@ Resources:
       - IpProtocol: -1
         CidrIp: 0.0.0.0/0
 
-  ServiceConfig:
-    Type: AWS::SSM::Parameter
-    Properties:
-      Type: String
-      Value:
-        Fn::Base64:
-          !Sub |
-            ${ConsulConfig}    
-      Description: !Sub '${Env} ${ServiceName} config'
-
-  ServiceConfigAccess:
-    Type: 'AWS::IAM::Policy'
-    Properties:
-      PolicyName: !Sub 'ConsulParamAccess-${ServiceName}'
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Allow
-            Action:
-              - 'ssm:GetParameters'
-              - 'ssm:GetParameter'
-              - 'ssm:GetParametersByPath'
-            Resource: !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${ServiceConfig}'
-      Roles:
-        - !Ref ASGToConsulRole
 
 
 Outputs:

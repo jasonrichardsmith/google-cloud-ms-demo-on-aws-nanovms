@@ -1,38 +1,29 @@
 {
-	"Env":{
+	"Env": {
 		"PORT": "8080",
 		"PRODUCT_CATALOG_SERVICE_ADDR": "productcatalogservice.service.consul:3550",
-          	"CURRENCY_SERVICE_ADDR": "currencyservice.service.consul:7000",
-		"CART_SERVICE_ADDR":"cartservice.service.consul:7070",
+		"CURRENCY_SERVICE_ADDR": "currencyservice.service.consul:7000",
+		"CART_SERVICE_ADDR": "cartservice.service.consul:7070",
 		"RECOMMENDATION_SERVICE_ADDR": "recommendationservice.service.consul:8080",
 		"SHIPPING_SERVICE_ADDR": "shippingservice.service.consul:50051",
-          	"CHECKOUT_SERVICE_ADDR": "checkoutservice.service.consul:5050",
-          	"AD_SERVICE_ADDR": "adservice.service.consul:9555",
+		"CHECKOUT_SERVICE_ADDR": "checkoutservice.service.consul:5050",
+		"AD_SERVICE_ADDR": "adservice.service.consul:9555",
 		"GOTRACEBACK": "single"
 	},
-	"Files":[
-		"frontend"
-	],
-	"Dirs":[
-		"static",
-		"templates",
-		"etc"
-	],
+	"Files": ["frontend"],
+	"Dirs": ["static", "templates", "etc"],
 	"RunConfig": {
-		"Ports":[
-			"8080"
-		],
+		"Ports": ["8080"],
 
-    "Klibs": ["syslog"]
+		"Klibs": ["syslog"]
 	},
-  "ManifestPassthrough": {
-    "syslog": {
-      "server": "fluentbit.service.consul"
-    }
-  },
-    	"CloudConfig" :{
-        	"Zone": "eu-west-1",
+	"ManifestPassthrough": {
+		"syslog": {
+			"server": "fluentbit.service.consul"
+		}
+	},
+	"CloudConfig": {
+		"Zone": "eu-west-1",
 		"Platform": "aws"
-    	}
+	}
 }
-

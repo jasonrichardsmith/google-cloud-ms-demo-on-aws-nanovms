@@ -1,0 +1,6 @@
+template_path: services/ingress.yaml
+parameters:
+  DestinationSecurityGroup: !stack_output {{ envname }}/services/frontend/asg.yaml::SecurityGroup
+  SourceSecurityGroup: !stack_output {{ envname }}/consul/consul.yaml::SecurityGroup
+  Port: '8080'
+  

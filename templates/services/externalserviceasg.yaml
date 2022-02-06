@@ -19,13 +19,15 @@ Parameters:
     Default: 3
   ServiceName:
     Type: String
+  ServiceConfig:
+    Type: String
   HealthCheckPath:
     Type: String
   Port:
     Type: Number
 
 Resources:
-  ServiceConfig:
+  ServiceLaunchConfig:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
       ImageId: !Ref AMI
@@ -43,7 +45,7 @@ Resources:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
       VPCZoneIdentifier: !Ref SubnetIds
-      LaunchConfigurationName: !Ref 'ServiceConfig'
+      LaunchConfigurationName: !Ref 'ServiceLaunchConfig'
       TerminationPolicies:
         - OldestInstance
       DesiredCapacity: !Ref InstanceQty
@@ -55,6 +57,12 @@ Resources:
         - Key: Name
           Value: !Sub '${Env}-${ServiceName}-Service'
           PropagateAtLaunch: 'true'
+        - Key: consulcloud
+          Value: service
+          PropagateAtLaunch: 'true'  
+        - Key: consulserviceconfig
+          Value: !Ref ServiceConfig
+          PropagateAtLaunch: 'true'  
   ServiceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:

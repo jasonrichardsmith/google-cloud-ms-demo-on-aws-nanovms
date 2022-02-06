@@ -58,6 +58,10 @@ buildrecommendationservice:  ## builds recommendationservice
 buildshippingservice:  ## builds shippingservice
 	./scripts/dockerbuild.sh shippingservice
 
+.PHONY: buildprometheus
+buildprometheus:  ## builds shippingservice
+	./scripts/dockerbuild.sh prometheus
+
 .PHONY: buildall
 buildall: buildadservice buildawsconsul buildcartservice buildcheckoutservice buildconsul 
 buildall: buildcurrencyservice buildemailservice buildfrontend buildpaymentservice buildproductcatalogservice

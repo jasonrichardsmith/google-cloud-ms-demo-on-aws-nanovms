@@ -19,6 +19,8 @@ Parameters:
     Type: String
   TargetGroups:
     Type: List<String>
+  ServiceConfig:
+    Type: String
 
 Resources:
   ServiceLaunchConfig:
@@ -51,6 +53,12 @@ Resources:
         - Key: Name
           Value: !Sub '${Env}-${ServiceName}-Service'
           PropagateAtLaunch: 'true'
+        - Key: consulcloud
+          Value: service
+          PropagateAtLaunch: 'true'  
+        - Key: consulserviceconfig
+          Value: !Ref ServiceConfig
+          PropagateAtLaunch: 'true'  
   ServiceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:

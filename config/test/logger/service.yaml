@@ -1,0 +1,6 @@
+template_path: services/serviceconfig.yaml
+parameters:
+  Env: {{ envname }}
+  ServiceName: 'fluentbitinstances'
+  ConsulConfig: !file_contents images/fluentbit/consul.json
+  ASGToConsulRole: !stack_output {{ envname }}/consul/iam.yaml::Role

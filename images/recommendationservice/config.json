@@ -1,41 +1,35 @@
 {
-    "Env": {
-	"PORT": "8080",
-	"DISABLE_PROFILER": "1",
-	"DISABLE_TRACING": "1",
-	"PRODUCT_CATALOG_SERVICE_ADDR":"productcatalogservice.service.consul:3550",
-	"GRPC_ENABLE_FORK_SUPPORT": "False"
-    },
-    "Files": [
-	    "client.py",
-	    "recommendation_server.py",
-	    "logger.py",
-	    "demo_pb2.py",
-	    "demo_pb2_grpc.py"
-    ],
-    "MapDirs": {
-        "./.venv/*": "/.local",
-        "./usr/lib64/*": "/usr/lib/x86_64-linux-gnu"
-    },
-    "RunConfig": {
-	    "Ports":[
-		    "8080"
-	    ],
-    		"Klibs": ["syslog"]
-    },
-  "ManifestPassthrough": {
-    "syslog": {
-      "server": "fluentbit.service.consul"
-    }
-  },
-    "Dirs": [
-	"etc"
-    ],
-    "CloudConfig": {
-	    "Zone": "eu-west-1",
-	    "Platform": "aws"
-    },
-    "Args": [
-        "recommendation_server.py"
-    ]
+	"Env": {
+		"PORT": "8080",
+		"DISABLE_PROFILER": "1",
+		"DISABLE_TRACING": "1",
+		"PRODUCT_CATALOG_SERVICE_ADDR": "productcatalogservice.service.consul:3550",
+		"GRPC_ENABLE_FORK_SUPPORT": "False"
+	},
+	"Files": [
+		"client.py",
+		"recommendation_server.py",
+		"logger.py",
+		"demo_pb2.py",
+		"demo_pb2_grpc.py"
+	],
+	"MapDirs": {
+		"./.venv/*": "/.local",
+		"./usr/lib64/*": "/usr/lib/x86_64-linux-gnu"
+	},
+	"RunConfig": {
+		"Ports": ["8080"],
+		"Klibs": ["syslog"]
+	},
+	"ManifestPassthrough": {
+		"syslog": {
+			"server": "fluentbit.service.consul"
+		}
+	},
+	"Dirs": ["etc"],
+	"CloudConfig": {
+		"Zone": "eu-west-1",
+		"Platform": "aws"
+	},
+	"Args": ["recommendation_server.py"]
 }

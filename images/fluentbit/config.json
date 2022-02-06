@@ -1,5 +1,5 @@
 {
-	"Args":[
+	"Args": [
 		"-e",
 		"/fluent-bit/firehose.so",
 		"-e",
@@ -11,21 +11,13 @@
 		"-R",
 		"/parsers.conf"
 	],
-	"Files":[
-	  "fluent-bit.conf",
-	  "parsers.conf"
-	],
-  	"Dirs": [
-    		"etc"
-  	],
+	"Files": ["fluent-bit.conf", "parsers.conf"],
+	"Dirs": ["etc"],
 	"RunConfig": {
-		"Ports":[
-			"514",
-			"2020"
-		]
+		"Ports": ["514", "2020"]
 	},
-    	"CloudConfig" :{
-        	"Zone": "eu-west-1",
+	"CloudConfig": {
+		"Zone": "eu-west-1",
 		"Platform": "aws"
-    	}
+	}
 }

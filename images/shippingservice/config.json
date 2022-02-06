@@ -1,34 +1,25 @@
 {
-	"Args":[
-		"shippingservice"
-	],
-	"Env":{
+	"Args": ["shippingservice"],
+	"Env": {
 		"PORT": "50051",
 		"DISABLE_STATS": "1",
-        	"DISABLE_TRACING": "1",
-        	"DISABLE_PROFILER": "1",
+		"DISABLE_TRACING": "1",
+		"DISABLE_PROFILER": "1",
 		"GOTRACEBACK": "single"
-
 	},
-	"Files":[
-		"shippingservice"
-	],
-	"Dirs": [
-		"etc"
-	],
+	"Files": ["shippingservice"],
+	"Dirs": ["etc"],
 	"RunConfig": {
-		"Ports": [
-			"50051"
-		],
-    		"Klibs": ["syslog"]
+		"Ports": ["50051"],
+		"Klibs": ["syslog"]
 	},
-  "ManifestPassthrough": {
-    "syslog": {
-      "server": "fluentbit.service.consul"
-    }
-  },
-    	"CloudConfig" :{
-        	"Zone": "eu-west-1",
+	"ManifestPassthrough": {
+		"syslog": {
+			"server": "fluentbit.service.consul"
+		}
+	},
+	"CloudConfig": {
+		"Zone": "eu-west-1",
 		"Platform": "aws"
-    	}
+	}
 }

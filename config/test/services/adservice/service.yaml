@@ -1,0 +1,6 @@
+template_path: services/serviceconfig.yaml
+parameters:
+  Env: {{ envname }}
+  ServiceName: 'adservice'
+  ConsulConfig: !file_contents images/adservice/consul.json
+  ASGToConsulRole: !stack_output {{ envname }}/consul/iam.yaml::Role

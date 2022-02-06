@@ -1,32 +1,25 @@
 {
-	"Env":{
+	"Env": {
 		"PORT": "3550",
 		"DISABLE_STATS": "1",
-        	"DISABLE_TRACING": "1",
-        	"DISABLE_PROFILER": "1",
+		"DISABLE_TRACING": "1",
+		"DISABLE_PROFILER": "1",
 		"GOTRACEBACK": "single"
 	},
-	"Files":[
-		"productcatalogservice",
-		"products.json"
-	],
-	"Dirs": [
-		"etc"
-	],
+	"Files": ["productcatalogservice", "products.json"],
+	"Dirs": ["etc"],
 	"RunConfig": {
-		"Ports":[
-			"3550"
-		],
+		"Ports": ["3550"],
 
-    		"Klibs": ["syslog"]
+		"Klibs": ["syslog"]
 	},
-  "ManifestPassthrough": {
-    "syslog": {
-      "server": "fluentbit.service.consul"
-    }
-  },
-    	"CloudConfig" :{
-        	"Zone": "eu-west-1",
+	"ManifestPassthrough": {
+		"syslog": {
+			"server": "fluentbit.service.consul"
+		}
+	},
+	"CloudConfig": {
+		"Zone": "eu-west-1",
 		"Platform": "aws"
-    	}
+	}
 }

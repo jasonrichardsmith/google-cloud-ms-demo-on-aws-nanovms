@@ -1,42 +1,35 @@
 {
-    "Env": {
-	"PORT": "5055",
-	"DISABLE_PROFILER": "1",
-	"GRPC_VERBOSITY":"debug",
-	"GRPC_ENABLE_FORK_SUPPORT": "False"
-    },
-    "Files": [
-	    "email_server.py",
-	    "email_client.py",
-	    "logger.py",
-	    "demo_pb2.py",
-	    "demo_pb2_grpc.py"
-    ],
-    "RunConfig": {
-	    "Ports":[
-		    "5055"
-	    ],
+	"Env": {
+		"PORT": "5055",
+		"DISABLE_PROFILER": "1",
+		"GRPC_VERBOSITY": "debug",
+		"GRPC_ENABLE_FORK_SUPPORT": "False"
+	},
+	"Files": [
+		"email_server.py",
+		"email_client.py",
+		"logger.py",
+		"demo_pb2.py",
+		"demo_pb2_grpc.py"
+	],
+	"RunConfig": {
+		"Ports": ["5055"],
 
-    	"Klibs": ["syslog"]
-    },
-    "MapDirs": {
-        "./.venv/*": "/.local",
-        "./usr/lib64/*": "/usr/lib/x86_64-linux-gnu"
-    },
-    "Dirs": [
-	"templates",
-	"etc"
-    ],
-  "ManifestPassthrough": {
-    "syslog": {
-      "server": "fluentbit.service.consul"
-    }
-  },
-    "CloudConfig": {
-	    "Zone": "eu-west-1",
-	    "Platform": "aws"
-    },
-    "Args": [
-        "email_server.py"
-    ]
+		"Klibs": ["syslog"]
+	},
+	"MapDirs": {
+		"./.venv/*": "/.local",
+		"./usr/lib64/*": "/usr/lib/x86_64-linux-gnu"
+	},
+	"Dirs": ["templates", "etc"],
+	"ManifestPassthrough": {
+		"syslog": {
+			"server": "fluentbit.service.consul"
+		}
+	},
+	"CloudConfig": {
+		"Zone": "eu-west-1",
+		"Platform": "aws"
+	},
+	"Args": ["email_server.py"]
 }

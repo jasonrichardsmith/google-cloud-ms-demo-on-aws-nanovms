@@ -1,0 +1,6 @@
+template_path: services/serviceconfig.yaml
+parameters:
+  Env: {{ envname }}
+  ServiceName: 'recommendationservice'
+  ConsulConfig: !file_contents images/recommendationservice/consul.json
+  ASGToConsulRole: !stack_output {{ envname }}/consul/iam.yaml::Role

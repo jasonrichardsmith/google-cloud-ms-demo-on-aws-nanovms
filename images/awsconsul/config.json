@@ -1,24 +1,20 @@
 {
-  "Env": {
-    "AWS_DEFAULT_REGION": "eu-west-1"
-  },
-  "Files": [
-    "awsconsul"
-  ],
-  "Dirs":[
-	  "etc"
-  ],
-  "CloudConfig": {
-    "Zone": "eu-west-1",
-    "Platform": "aws"
-  },
+	"Env": {
+		"AWS_DEFAULT_REGION": "eu-west-1"
+	},
+	"Files": ["awsconsul"],
+	"Dirs": ["etc"],
+	"CloudConfig": {
+		"Zone": "eu-west-1",
+		"Platform": "aws"
+	},
 
-  "ManifestPassthrough": {
-    "syslog": {
-      "server": "fluentbit.service.consul"
-    }
-  },
- "RunConfig": {
-    "Klibs": ["syslog"]
-  }
+	"ManifestPassthrough": {
+		"syslog": {
+			"server": "fluentbit.service.consul"
+		}
+	},
+	"RunConfig": {
+		"Klibs": ["syslog"]
+	}
 }

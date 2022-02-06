@@ -67,7 +67,7 @@ All the applications from microservices-demo reference a specific git commit to 
 Notes for all repositories:
 - Consul is used for service discovery with DNS and they applications
 get a resolv.conf in etc that points to an internal NLB that has static IPS. The NLB targets a Consul cluster.
-- All services that need to be discovered come with a ```consul.txt``` which defines a Consul Service. This
+- All services that need to be discovered come with a ```consul.json``` which defines a Consul Service. This
 is autoloaded into AWs Parameter store and eventually pushed into Consul. All Consul features of a service
 including healthchecks are supported.
 - Every application has a ```config.json```, which tells ops how to build the vms and where to put it.

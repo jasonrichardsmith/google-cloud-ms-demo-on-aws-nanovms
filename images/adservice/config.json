@@ -1,20 +1,15 @@
 {
-	"Env":{
+	"Env": {
 		"PORT": "9555",
 		"DISABLE_STATS": "1",
-        	"DISABLE_TRACING": "1"
-
+		"DISABLE_TRACING": "1"
 	},
-	"Dirs":[
-		"build"
-	],
+	"Dirs": ["build"],
 	"RunConfig": {
-		"Ports": [
-			"9555"
-		],
-    		"Klibs": ["syslog"]
+		"Ports": ["9555"],
+		"Klibs": ["syslog"]
 	},
-	"Args":[
+	"Args": [
 		"-Dos.name=Linux",
 		"-Xmx64m",
 		"-Xms64m",
@@ -24,14 +19,13 @@
 		"hipstershop.AdService"
 	],
 
-  "ManifestPassthrough": {
-    "syslog": {
-      "server": "fluentbit.service.consul"
-    }
-  },
-    	"CloudConfig" :{
-        	"Zone": "eu-west-1",
+	"ManifestPassthrough": {
+		"syslog": {
+			"server": "fluentbit.service.consul"
+		}
+	},
+	"CloudConfig": {
+		"Zone": "eu-west-1",
 		"Platform": "aws"
-    	}
+	}
 }
-

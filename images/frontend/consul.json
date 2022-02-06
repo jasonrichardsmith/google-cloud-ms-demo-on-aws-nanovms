@@ -1,0 +1,16 @@
+[
+	{
+		"Name": "frontend",
+		"EnableTagOverride": false,
+		"Check": {
+			"DeregisterCriticalServiceAfter": "10m",
+			"HTTP": "http://HEALTHROUTE:8080/_healthz",
+			"Interval": "5s",
+			"Timeout": "5s"
+		},
+		"Weights": {
+			"Passing": 10,
+			"Warning": 1
+		}
+	}
+]

@@ -1,0 +1,6 @@
+template_path: services/serviceconfig.yaml
+parameters:
+  Env: {{ envname }}
+  ServiceName: 'checkoutservice'
+  ConsulConfig: !file_contents images/checkoutservice/consul.json
+  ASGToConsulRole: !stack_output {{ envname }}/consul/iam.yaml::Role

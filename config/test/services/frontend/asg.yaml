@@ -1,4 +1,6 @@
 template_path: services/externalserviceasg.yaml
+dependencies:
+  - {{ envname }}/logger/asg.yaml
 parameters:
   Env: {{ envname }}
   VPC: !stack_output {{ envname }}/network/vpc.yaml::VPC
@@ -16,4 +18,4 @@ parameters:
   ServiceName: 'frontend'
   HealthCheckPath: '/_healthz'
   Port: '8080'
-  
+  ServiceConfig: !stack_output {{ envname }}/services/frontend/service.yaml::ServiceConfig
