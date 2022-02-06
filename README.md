@@ -17,6 +17,8 @@ Export your AWS credentials to
 **This repo is set for eu-west-1**
 
 Build your images:
+note: you can build concurrently with ```-j``` but you may hit AWS rate limits and all your builds may not work.
+There is an [issue](https://github.com/nanovms/ops/issues/1244) for this.
 ```bash
 make buildall
 ```
@@ -68,7 +70,7 @@ Notes for all repositories:
 - Consul is used for service discovery with DNS and they applications
 get a resolv.conf in etc that points to an internal NLB that has static IPS. The NLB targets a Consul cluster.
 - All services that need to be discovered come with a ```consul.json``` which defines a Consul Service. This
-is autoloaded into AWs Parameter store and eventually pushed into Consul. All Consul features of a service
+is autoloaded into AWS Parameter store and eventually pushed into Consul. All Consul features of a service
 including healthchecks are supported.
 - Every application has a ```config.json```, which tells ops how to build the vms and where to put it.
 - Every folder has a ```Dockerfile``` that builds the AWS AMIs.
@@ -79,13 +81,13 @@ Notes on the applications
 	- Built on Gradle.
 	- Gradle generates a bash script that is used to launch the app. The arguments are extraccted from
 this bash script and added to the arguments of the ```config.json```. Bash is not a thing in Unikernels.
-- **asgtoconsul:**
+- **awsconsul:**
 	- Built on Go.
 	- This application scans EC2 tags for key ```consulcloud``` with value ```service```.  Returned instances
 then look for a parameter store value under the tag key ```consulserviceconfig``` which references a parameter store.
 The parameter store is the Consul Service config.  The IP Address, Instance name and "HEALTHROUTE" is repaced with the 
 InstanceId.
-	- This may be broken into another repo... I like it.
+	- This has been broken into another repo.
 - **cartservice:**
 	- Built on Dotnet.
 	- "InvariantGlobalization" is injected to make it work.
@@ -100,7 +102,7 @@ InstanceId.
 	- This has a patch because the Google version built on 3.7 uses a log format not supported in 3.8
 - **fluentbit:**
 	- This demonstrates how to build a package, FluentBit was not available on NanoVMs.
-	- This is a work in progress as a log runner for NanoVMs
+	- This is the log runner for NanoVMs.
 - **frontend:**
 	- Built on Go
 - **paymentservice:**
@@ -120,12 +122,23 @@ Deployment is done with [sceptre](https://github.com/Sceptre/sceptre), but from 
 Sceptre uses Cloudformation templates in the templates folder and stores its per environment configuration
 in the config folder.
 
+## Consul Services.
+
+Consul has two ways to register services. One as "Agent" the other as "Catalog".  Consul assumes an agent is running on each machine,
+which in our case it is not. DNS and health checks work normally, so this really is not a big issue, but due to the manner
+in which services get registered, they can get registered under two agents for one service, so you will see two services running,
+but there is only one.  We could use
+catalog but catalog services do not support health checks (as far as I could tell from my research). Agent service
+registration should have no impact on functionality.
+
 ## Bugs
 
-- Consul derives its name from its hostname.  Currently all NanoVMS get a static hostname called "nanovms". There is an 
-[issue](https://github.com/nanovms/nanos/issues/1655) for that. That means currently we just build three separate 
-AMIs and are limioted to 3 consul instances.
+- Syslog is currently set as static IP, when [this PR](https://github.com/nanovms/nanos/pull/1674)
+gets merged it will switch to complete DNS resolution.
 - Ops has an [issue](https://github.com/nanovms/ops/issues/1244) with large AWS AMIs. Ops is run in a container. The container
 has a regular version and "opssafe" version that deal with the issue with large images.  You can view the [Dockerfile](Dockerfile)
 to perform your own build.
 
+## Next features
+
+- Prometheus metrics with service discovery through Consul.
