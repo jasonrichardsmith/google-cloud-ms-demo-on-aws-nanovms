@@ -54,7 +54,7 @@ and builds unikernel vms for AWS.
 
 ## Architecture
 
-![Architecture](arch.png)
+![Architecture](arch1.png)
 
 
 ## Applications
