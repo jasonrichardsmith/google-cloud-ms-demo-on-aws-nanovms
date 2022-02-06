@@ -130,6 +130,15 @@ in which services get registered, they can get registered under two agents for o
 but there is only one.  We could use
 catalog but catalog services do not support health checks (as far as I could tell from my research). Agent service
 registration should have no impact on functionality.
+Please see below for Consul logging
+
+## Consul Logging
+
+Logging for all the shop services should work right away.
+
+Consul logging will not be working righ away due to a chicken and egg issue. To get Consul logging working, 
+scale up your Consul ASG up to around 7 instances, wait a few minutes and scale back down.  Logging should work for the new Consul
+instances.
 
 ## Bugs
 
@@ -138,6 +147,9 @@ gets merged it will switch to complete DNS resolution.
 - Ops has an [issue](https://github.com/nanovms/ops/issues/1244) with large AWS AMIs. Ops is run in a container. The container
 has a regular version and "opssafe" version that deal with the issue with large images.  You can view the [Dockerfile](Dockerfile)
 to perform your own build.
+- There is an issue with instances starting, which is very intermittent. If you go to your Consul ui and see an unhealthy service, 
+try terminating the instance. It will be automtically replaced and the new one should boot fine.
+[There is an issue](https://github.com/nanovms/nanos/issues/1676) for this.
 
 ## Next features
 
